@@ -36,13 +36,14 @@ function render() {
              value={this.state.username}
              placeholder='Name'/>
           <TextInput
-    style={styles.searchInput}
-    onChange={this.on_password_change}
-    value={this.state.password}
+             style={styles.searchInput}
+             onChange={this.on_password_change}
+             value={this.state.password}
+             secureTextEntry={true}
              placeholder='Password'/>
         </View>
         <TouchableHighlight style={styles.button}
-    onPress={this.signin}
+                            onPress={this.signin}
                             underlayColor='#99d9f4'>
           <Text style={styles.buttonText}>Sign in</Text>
         </TouchableHighlight>
@@ -52,13 +53,13 @@ function render() {
 
 function getInitialState() {
   return {
-    username: 'test',
-    password: '123456'
+    username: '',
+    password: ''
   };
 }
 
-function username_input(event) {
-  this.setState({ password: event.nativeEvent.text });
+function on_username_change(event) {
+  this.setState({ username: event.nativeEvent.text });
 }
 
 function on_password_change(event) {
@@ -69,12 +70,33 @@ function signin() {
   //this.setState({username: '456'});
   console.log('username:', this.state.username);
   console.log('password:', this.state.password);
+
+  fetch('http://127.0.0.1:6006/api/auth/signin', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      name: this.state.username,
+      password: this.state.password
+    })
+  })
+    .then((response) => response.json())
+    .then((responseData) => {
+      /*this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
+        loaded: true
+       });*/
+      console.log(responseData);
+    })
+    .done();
 }
 
 var options = {
   render: render,
   getInitialState: getInitialState,
-  username_input: username_input,
+  on_username_change: on_username_change,
   on_password_change: on_password_change,
   signin: signin
 };
