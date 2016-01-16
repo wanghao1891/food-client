@@ -24,61 +24,62 @@ function render() {
   return (
       <View style={styles.container}>
         <Text style={styles.description}>
-          Search for houses to buy!
+          Food
         </Text>
         <Text style={styles.description}>
-          Search by place-name, postcode or search near your location.
+          Record the detail of food
         </Text>
         <View style={styles.flowRight}>
           <TextInput
              style={styles.searchInput}
-             placeholder='Search via name or postcode'/>
-          <TouchableHighlight style={styles.button}
-                              underlayColor='#99d9f4'>
-            <Text style={styles.buttonText}>Go</Text>
-          </TouchableHighlight>
+             onChangeText={(username) => this.setState({username})}
+             value={this.state.username}
+             placeholder='Name'/>
+          <TextInput
+    style={styles.searchInput}
+    onChange={this.on_password_change}
+    value={this.state.password}
+             placeholder='Password'/>
         </View>
         <TouchableHighlight style={styles.button}
+    onPress={this.signin}
                             underlayColor='#99d9f4'>
-          <Text style={styles.buttonText}>Location</Text>
+          <Text style={styles.buttonText}>Sign in</Text>
         </TouchableHighlight>
       </View>
   );
 }
 
+function getInitialState() {
+  return {
+    username: 'test',
+    password: '123456'
+  };
+}
+
+function username_input(event) {
+  this.setState({ password: event.nativeEvent.text });
+}
+
+function on_password_change(event) {
+  this.setState({password: event.nativeEvent.text});
+}
+
+function signin() {
+  //this.setState({username: '456'});
+  console.log('username:', this.state.username);
+  console.log('password:', this.state.password);
+}
+
 var options = {
-  render: render
+  render: render,
+  getInitialState: getInitialState,
+  username_input: username_input,
+  on_password_change: on_password_change,
+  signin: signin
 };
 
 var mobile = React.createClass(options);
-
-/*var mobile = React.createClass({
-  render: function() {
-    return (
-        <View style={styles.container}>
-          <Text style={styles.description}>
-            Search for houses to buy!
-          </Text>
-          <Text style={styles.description}>
-            Search by place-name, postcode or search near your location.
-          </Text>
-          <View style={styles.flowRight}>
-            <TextInput
-               style={styles.searchInput}
-               placeholder='Search via name or postcode'/>
-            <TouchableHighlight style={styles.button}
-                                underlayColor='#99d9f4'>
-              <Text style={styles.buttonText}>Go</Text>
-            </TouchableHighlight>
-          </View>
-          <TouchableHighlight style={styles.button}
-                              underlayColor='#99d9f4'>
-            <Text style={styles.buttonText}>Location</Text>
-          </TouchableHighlight>
-        </View>
-    );
-  }
-});*/
 
 var styles = StyleSheet.create({
   description: {
