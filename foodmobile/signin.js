@@ -41,13 +41,26 @@ function render() {
           <Text style={styles.buttonText}>Sign in</Text>
         </TouchableHighlight>
         <TouchableHighlight style={styles.button}
-                            onPress={this.signin}
+    onPress={this.show_singup_view}
                             underlayColor='#99d9f4'>
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableHighlight>
       </View>
   );
 }
+
+function show_singup_view() {
+  this.props.navigator.push({
+    id: 'signup'
+  });
+}
+
+var options = {
+  render: render,
+  show_singup_view: show_singup_view
+};
+
+var SigninView = React.createClass(options);
 
 const styles = StyleSheet.create({
   container: {
@@ -96,11 +109,5 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   }
 });
-
-var options = {
-  render: render
-};
-
-var SigninView = React.createClass(options);
 
 module.exports = SigninView;
