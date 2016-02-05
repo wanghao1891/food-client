@@ -12,6 +12,7 @@ import React, {
 
 var SigninView = require('./signin');
 var SignupView = require('./signup');
+var ShowView = require('./show');
 
 function render() {
   return (
@@ -34,6 +35,8 @@ function render_scene(route, navigator) {
     return <SigninView navigator={navigator} />;
   case 'signup':
     return <SignupView navigator={navigator} />;
+  case 'show':
+    return <ShowView navigator={navigator} />;
   default:
     return <SigninView navigator={navigator} />;
   }

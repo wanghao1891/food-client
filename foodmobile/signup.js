@@ -1,5 +1,5 @@
 /**
- * Singin View
+ * Singup View
  */
 
 'use strict';
@@ -26,22 +26,17 @@ function render() {
           <TextInput
              style={styles.signInput}
              onChangeText={(username) => this.setState({username})}
-            value={this.props.username}
+            value={this.state.username}
              placeholder='Name'/>
           <TextInput
              style={styles.signInput}
              onChange={this.on_password_change}
-             value={this.props.password}
+             value={this.state.password}
              secureTextEntry={true}
              placeholder='Password'/>
         </View>
         <TouchableHighlight style={styles.button}
-                            onPress={this.signin}
-                            underlayColor='#99d9f4'>
-          <Text style={styles.buttonText}>Sign in</Text>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.button}
-    onPress={this.show_singup_view}
+                            onPress={this.signup}
                             underlayColor='#99d9f4'>
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableHighlight>
@@ -49,25 +44,34 @@ function render() {
   );
 }
 
-function show_singup_view() {
-  this.props.navigator.push({
-    id: 'signup'
-  });
+function get_initial_state() {
+  return {
+    username: '',
+    password: ''
+  };
 }
 
-function signin() {
+function on_username_change(event) {
+  this.setState({ username: event.nativeEvent.text });
+}
+
+function on_password_change(event) {
+  this.setState({password: event.nativeEvent.text});
+}
+
+function signup() {
   //this.setState({username: '456'});
   console.log('username:', this.state.username);
   console.log('password:', this.state.password);
 
-  fetch('http://127.0.0.1:6006/api/auth/signin', {
+  fetch('http://127.0.0.1:6006/api/auth/signup', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      name: this.state.username,
+      username: this.state.username,
       password: this.state.password
     })
   })
@@ -85,11 +89,13 @@ function signin() {
 
 var options = {
   render: render,
-  show_singup_view: show_singup_view,
-  signin: signin
+  getInitialState: get_initial_state,
+  signup: signup,
+  on_username_change: on_username_change,
+  on_password_change: on_password_change
 };
 
-var SigninView = React.createClass(options);
+var SignupView = React.createClass(options);
 
 const styles = StyleSheet.create({
   container: {
@@ -139,4 +145,4 @@ const styles = StyleSheet.create({
   }
 });
 
-module.exports = SigninView;
+module.exports = SignupView;
