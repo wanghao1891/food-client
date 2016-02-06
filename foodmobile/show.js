@@ -7,13 +7,14 @@
 import React, {
   StyleSheet,
   Text,
-  View
+  View,
+  ListView
 } from 'react-native';
 
 function render() {
   return (
       <View style={styles.container}>
-      <Text>Welcome!</Text>
+      <Text>Welcome! {this.props.sid}</Text>
       </View>
   );
 }

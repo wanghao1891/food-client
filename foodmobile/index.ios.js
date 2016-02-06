@@ -36,7 +36,8 @@ function render_scene(route, navigator) {
   case 'signup':
     return <SignupView navigator={navigator} />;
   case 'show':
-    return <ShowView navigator={navigator} />;
+    return <ShowView navigator={navigator}
+    sid={route.sid} />;
   default:
     return <SigninView navigator={navigator} />;
   }

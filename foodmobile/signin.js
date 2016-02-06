@@ -49,6 +49,21 @@ function render() {
   );
 }
 
+function get_initial_state() {
+  return {
+    username: '',
+    password: ''
+  };
+}
+
+function on_username_change(event) {
+  this.setState({ username: event.nativeEvent.text });
+}
+
+function on_password_change(event) {
+  this.setState({password: event.nativeEvent.text});
+}
+
 function show_singup_view() {
   this.props.navigator.push({
     id: 'signup'
@@ -72,13 +87,16 @@ function signin() {
     })
   })
     .then((response) => response.json())
-    .then((responseData) => {
+    .then((response_data) => {
       /*this.setState({
         dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
         loaded: true
        });*/
-      this.props.navigator.push({id: 'show'});
-      console.log(responseData);
+      this.props.navigator.push({
+        id: 'show',
+        sid: response_data.sid
+      });
+      console.log(response_data);
     })
     .done();
 }
@@ -86,7 +104,10 @@ function signin() {
 var options = {
   render: render,
   show_singup_view: show_singup_view,
-  signin: signin
+  signin: signin,
+  getInitialState: get_initial_state,
+  on_username_change: on_username_change,
+  on_password_change: on_password_change
 };
 
 var SigninView = React.createClass(options);
