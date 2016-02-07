@@ -93,9 +93,11 @@ function signin() {
         loaded: true
        });*/
       this.props.navigator.push({
-        id: 'show',
-        sid: response_data.sid
+        id: 'food_list',
+        sid: response_data.sid,
+        username: this.state.username
       });
+      console.log(this.state.username);
       console.log(response_data);
     })
     .done();

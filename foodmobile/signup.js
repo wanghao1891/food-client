@@ -81,7 +81,7 @@ function signup() {
         dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
         loaded: true
        });*/
-      this.props.navigator.push({id: 'show'});
+      this.props.navigator.push({id: 'food_list'});
       console.log(responseData);
     })
     .done();

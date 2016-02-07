@@ -8,7 +8,8 @@ import React, {
   StyleSheet,
   Text,
   View,
-  ListView
+  ListView,
+  TouchableHighlight
 } from 'react-native';
 
 function render() {
@@ -25,8 +26,14 @@ function render() {
       <View>
 
       <View style={styles.container}>
-      <Text>Welcome! {this.props.sid}</Text>
+      <Text>Welcome! {this.props.username}</Text>
       </View>
+
+      <TouchableHighlight style={styles.create_food}
+    onPress={this.create_food}
+    underlayColor='#99d9f4'>
+      <Text style={styles.button_text}>Add</Text>
+      </TouchableHighlight>
 
       <ListView
     dataSource={this.state.data_source}
@@ -53,6 +60,14 @@ function render_row(e) {
       <Text>{e.name}</Text>
       </View>
   );
+}
+
+function create_food() {
+  this.props.navigator.push({
+    id: 'create_food',
+    sid: this.props.sid,
+    username: this.props.username
+  });
 }
 
 function component_did_mount() {
@@ -84,7 +99,8 @@ var options = {
   render: render,
   getInitialState: get_initial_state,
   render_row: render_row,
-  componentDidMount: component_did_mount
+  componentDidMount: component_did_mount,
+  create_food: create_food
 };
 
 var ShowView = React.createClass(options);
@@ -109,6 +125,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     //backgroundColor: '#F5FCFF',
     marginTop: 20
+  },
+  create_food: {
+    height: 30,
+    width: 50,
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#48BBEC',
+    borderColor: '#48BBEC',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 5,
+    marginLeft: 30,
+    alignSelf: 'stretch',
+    justifyContent: 'center'
+  },
+  button_text: {
+    fontSize: 18,
+    color: 'white',
+    alignSelf: 'center'
   }
 });
 
