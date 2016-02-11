@@ -57,7 +57,7 @@ function get_initial_state() {
 function render_row(e) {
   return (
       <View style={styles.list_element_view}>
-      <Text>{e.name}</Text>
+      <Text>{e.name} {e.expiration_date}</Text>
       </View>
   );
 }

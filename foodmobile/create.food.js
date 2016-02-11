@@ -9,7 +9,8 @@ import React, {
   View,
   Text,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  DatePickerIOS
 } from 'react-native';
 
 function render() {
@@ -21,7 +22,6 @@ function render() {
       </View>
 
       <View style={styles.name_container}>
-      <Text>Name: </Text>
       <TextInput
     style={styles.name_input}
     onChange={this.on_foodname_change}
@@ -31,18 +31,33 @@ function render() {
       </TextInput>
       </View>
 
+      <View style={styles.exp_container}>
+      <Text>Exp.</Text>
+      <DatePickerIOS
+    date={this.state.date}
+    mode="date"
+    timeZoneOffsetInMinutes={this.state.time_zone_offset_in_hours * 60}
+    onDateChange={this.on_date_change}
+      />
+      </View>
+
+      <View style={styles.name_container}>
       <TouchableHighlight style={styles.button}
     onPress={this.create_food}
     underlayColor='#99d9f4'>
       <Text style={styles.buttonText}>Add</Text>
       </TouchableHighlight>
       </View>
+
+      </View>
   );
 }
 
 function get_initial_state() {
   return {
-    foodname: ''
+    foodname: '',
+    date: new Date(),
+    time_zone_offset_in_hours: (-1) * (new Date()).getTimezoneOffset() / 60
   };
 }
 
@@ -50,9 +65,13 @@ function on_foodname_change(event) {
   this.setState({ foodname: event.nativeEvent.text});
 }
 
+function on_date_change(date) {
+  this.setState({date: date});
+}
+
 function create_food() {
-  console.log('username:', this.state.username);
-  console.log('password:', this.state.password);
+  console.log('foodname:', this.state.foodname);
+  console.log('expired:', this.state.date);
 
   fetch('http://127.0.0.1:6006/api/food', {
     method: 'POST',
@@ -62,7 +81,8 @@ function create_food() {
       sid: this.props.sid
     },
     body: JSON.stringify({
-      name: this.state.foodname
+      name: this.state.foodname,
+      expiration_date: this.state.date.getTime()
     })
   })
     .then((response) => response.json())
@@ -86,6 +106,7 @@ var options = {
   render: render,
   getInitialState: get_initial_state,
   on_foodname_change: on_foodname_change,
+  on_date_change: on_date_change,
   create_food: create_food
 };
 
@@ -118,15 +139,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     color: '#48BBEC'
   },
+  exp_container: {
+    paddingLeft: 30,
+    paddingRight: 30,
+    flexDirection: 'column',
+    alignItems: 'center',
+    alignSelf: 'stretch'
+  },
   button: {
     height: 36,
     flex: 1,
-    flexDirection: 'row',
+    //flexDirection: 'row',
     backgroundColor: '#48BBEC',
     borderColor: '#48BBEC',
     borderWidth: 1,
     borderRadius: 8,
-    marginBottom: 5,
+    marginTop: 25,
     alignSelf: 'stretch',
     justifyContent: 'center'
   },

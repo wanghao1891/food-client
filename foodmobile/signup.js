@@ -76,13 +76,17 @@ function signup() {
     })
   })
     .then((response) => response.json())
-    .then((responseData) => {
+    .then((response_data) => {
       /*this.setState({
         dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
         loaded: true
        });*/
-      this.props.navigator.push({id: 'food_list'});
-      console.log(responseData);
+      this.props.navigator.push({
+        id: 'food_list',
+        sid: response_data.sid,
+        username: this.state.username
+      });
+      console.log(response_data);
     })
     .done();
 }
