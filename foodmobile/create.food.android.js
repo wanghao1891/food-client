@@ -10,8 +10,39 @@ import React, {
   Text,
   TextInput,
   TouchableHighlight,
-  DatePickerIOS
+  DatePickerAndroid,
+  TouchableWithoutFeedback
 } from 'react-native';
+
+console.log('DatePickerAndroid:', DatePickerAndroid);
+
+var CalendarPicker = require('react-native-calendar-picker');
+
+async function show_picker(stateKey, options) {
+  console.log('DatePickerAndroid:', DatePickerAndroid);
+  try {
+    var newState = {};
+    const {action, year, month, day} = await DatePickerAndroid.open(options);
+    if (action === DatePickerAndroid.dismissedAction) {
+      newState[stateKey + 'Text'] = 'dismissed';
+    } else {
+      var date = new Date(year, month, day);
+      newState[stateKey + 'Text'] = date.toLocaleDateString();
+      newState[stateKey + 'Date'] = date;
+    }
+    this.setState(newState);
+  } catch ({code, message}) {
+    console.warn(`Error in example '${stateKey}': `, message);
+  }
+}
+
+//      <View style={styles.exp_container}>
+//      <Text>Exp.</Text>
+//      <TouchableWithoutFeedback
+//    onPress={this.show_picker.bind(this, 'simple', {date: this.state.date})}>
+//      <Text style={styles.text}>pick a date</Text>
+//      </TouchableWithoutFeedback>
+//      </View>
 
 function render() {
   return (
@@ -33,12 +64,12 @@ function render() {
 
       <View style={styles.exp_container}>
       <Text>Exp.</Text>
-      <DatePickerIOS
-    date={this.state.date}
-    mode="date"
-    timeZoneOffsetInMinutes={this.state.time_zone_offset_in_hours * 60}
-    onDateChange={this.on_date_change}
-      />
+
+      <CalendarPicker
+    selectedDate={this.state.date}
+    onDateChange={this.on_date_change} />
+
+      <Text style={styles.selectedDate}>Date:  { this.state.date.toString() } </Text>
       </View>
 
       <View style={styles.name_container}>
@@ -73,7 +104,7 @@ function create_food() {
   console.log('foodname:', this.state.foodname);
   console.log('expired:', this.state.date);
 
-  fetch('http://127.0.0.1:6006/api/food', {
+  fetch(this.props.host + '/api/food', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -107,7 +138,8 @@ var options = {
   getInitialState: get_initial_state,
   on_foodname_change: on_foodname_change,
   on_date_change: on_date_change,
-  create_food: create_food
+  create_food: create_food,
+  show_picker: show_picker
 };
 
 var CreateFoodView = React.createClass(options);

@@ -4,6 +4,8 @@
 
 'use strict';
 
+var moment = require('moment');
+
 import React, {
   StyleSheet,
   Text,
@@ -57,7 +59,7 @@ function get_initial_state() {
 function render_row(e) {
   return (
       <View style={styles.list_element_view}>
-      <Text>{e.name} {e.expiration_date}</Text>
+      <Text>{e.name} {moment.unix(e.expiration_date/1000).format('YYYY-MM-DD')}</Text>
       </View>
   );
 }
@@ -71,7 +73,7 @@ function create_food() {
 }
 
 function component_did_mount() {
-  fetch('http://127.0.0.1:6006/api/food', {
+  fetch(this.props.host + '/api/food', {
     method: 'GET',
     headers: {
       'Accept': 'application/json',

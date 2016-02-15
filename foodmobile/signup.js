@@ -64,7 +64,7 @@ function signup() {
   console.log('username:', this.state.username);
   console.log('password:', this.state.password);
 
-  fetch('http://127.0.0.1:6006/api/auth/signup', {
+  fetch(this.props.host + '/api/auth/signup', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

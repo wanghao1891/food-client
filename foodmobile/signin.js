@@ -71,11 +71,11 @@ function show_singup_view() {
 }
 
 function signin() {
-  //this.setState({username: '456'});
   console.log('username:', this.state.username);
   console.log('password:', this.state.password);
+  console.log('host:', this.props.host);
 
-  fetch('http://127.0.0.1:6006/api/auth/signin', {
+  fetch(this.props.host + '/api/auth/signin', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -88,10 +88,6 @@ function signin() {
   })
     .then((response) => response.json())
     .then((response_data) => {
-      /*this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
-        loaded: true
-       });*/
       this.props.navigator.push({
         id: 'food_list',
         sid: response_data.sid,
