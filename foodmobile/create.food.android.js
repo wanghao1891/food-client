@@ -10,31 +10,31 @@ import React, {
   Text,
   TextInput,
   TouchableHighlight,
-  DatePickerAndroid,
+  //DatePickerAndroid,
   TouchableWithoutFeedback
 } from 'react-native';
 
-console.log('DatePickerAndroid:', DatePickerAndroid);
+//console.log('DatePickerAndroid:', DatePickerAndroid);
 
 var CalendarPicker = require('react-native-calendar-picker');
 
-async function show_picker(stateKey, options) {
-  console.log('DatePickerAndroid:', DatePickerAndroid);
-  try {
-    var newState = {};
-    const {action, year, month, day} = await DatePickerAndroid.open(options);
-    if (action === DatePickerAndroid.dismissedAction) {
-      newState[stateKey + 'Text'] = 'dismissed';
-    } else {
-      var date = new Date(year, month, day);
-      newState[stateKey + 'Text'] = date.toLocaleDateString();
-      newState[stateKey + 'Date'] = date;
-    }
-    this.setState(newState);
-  } catch ({code, message}) {
-    console.warn(`Error in example '${stateKey}': `, message);
-  }
-}
+//async function show_picker(stateKey, options) {
+//  //console.log('DatePickerAndroid:', DatePickerAndroid);
+//  try {
+//    var newState = {};
+//    const {action, year, month, day} = await DatePickerAndroid.open(options);
+//    if (action === DatePickerAndroid.dismissedAction) {
+//      newState[stateKey + 'Text'] = 'dismissed';
+//    } else {
+//      var date = new Date(year, month, day);
+//      newState[stateKey + 'Text'] = date.toLocaleDateString();
+//      newState[stateKey + 'Date'] = date;
+//    }
+//    this.setState(newState);
+//  } catch ({code, message}) {
+//    console.warn(`Error in example '${stateKey}': `, message);
+//  }
+//}
 
 //      <View style={styles.exp_container}>
 //      <Text>Exp.</Text>
@@ -118,10 +118,6 @@ function create_food() {
   })
     .then((response) => response.json())
     .then((response_data) => {
-      /*this.setState({
-       dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
-       loaded: true
-       });*/
       this.props.navigator.push({
         id: 'food_list',
         sid: this.props.sid,
@@ -138,8 +134,8 @@ var options = {
   getInitialState: get_initial_state,
   on_foodname_change: on_foodname_change,
   on_date_change: on_date_change,
-  create_food: create_food,
-  show_picker: show_picker
+  create_food: create_food
+  //show_picker: show_picker
 };
 
 var CreateFoodView = React.createClass(options);

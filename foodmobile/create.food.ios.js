@@ -4,16 +4,37 @@
 
 'use strict';
 
+var moment = require('moment');
+
 import React, {
   StyleSheet,
   View,
   Text,
   TextInput,
   TouchableHighlight,
-  DatePickerIOS
+  DatePickerIOS,
+  TouchableOpacity,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 function render() {
+  var date_picker = (
+      <View style={styles.data_picker}>
+      <TouchableOpacity
+    onPress={this.toggle_date_picker}
+    style={{padding:5, alignItems: 'flex-end'}}
+      >
+      <Text>Done</Text>
+      </TouchableOpacity>
+      <DatePickerIOS
+    date={this.state.date}
+    mode="date"
+    timeZoneOffsetInMinutes={this.state.time_zone_offset_in_hours * 60}
+    onDateChange={this.on_date_change}
+      />
+      </View>
+  );
+
   return (
       <View>
 
@@ -22,6 +43,7 @@ function render() {
       </View>
 
       <View style={styles.name_container}>
+      <Text style={{width: 80}}>Name: </Text>
       <TextInput
     style={styles.name_input}
     onChange={this.on_foodname_change}
@@ -32,13 +54,17 @@ function render() {
       </View>
 
       <View style={styles.exp_container}>
-      <Text>Exp.</Text>
-      <DatePickerIOS
-    date={this.state.date}
-    mode="date"
-    timeZoneOffsetInMinutes={this.state.time_zone_offset_in_hours * 60}
-    onDateChange={this.on_date_change}
-      />
+      <Text style={{width: 80}}>Exp.: </Text>
+
+      <TouchableWithoutFeedback
+    onPress={this.toggle_date_picker}
+      >
+      <View style={styles.input}>
+      <Text>
+      {moment(this.state.date).format('YYYY-MM-DD')}
+      </Text>
+      </View>
+      </TouchableWithoutFeedback>
       </View>
 
       <View style={styles.name_container}>
@@ -47,7 +73,15 @@ function render() {
     underlayColor='#99d9f4'>
       <Text style={styles.buttonText}>Add</Text>
       </TouchableHighlight>
+
+      <TouchableHighlight style={styles.button}
+    onPress={this.props.navigator.pop}
+    underlayColor='#99d9f4'>
+      <Text style={styles.buttonText}>Cancel</Text>
+      </TouchableHighlight>
       </View>
+
+      {this.state.date_picker_mode == 'visible' ? date_picker : <View/>}
 
       </View>
   );
@@ -57,8 +91,14 @@ function get_initial_state() {
   return {
     foodname: '',
     date: new Date(),
-    time_zone_offset_in_hours: (-1) * (new Date()).getTimezoneOffset() / 60
+    time_zone_offset_in_hours: (-1) * (new Date()).getTimezoneOffset() / 60,
+    date_picker_mode: 'hidden'
   };
+}
+
+function toggle_date_picker() {
+  var mode = this.state.date_picker_mode == 'hidden' ? 'visible' : 'hidden';
+  this.setState({date_picker_mode: mode});
 }
 
 function on_foodname_change(event) {
@@ -87,10 +127,6 @@ function create_food() {
   })
     .then((response) => response.json())
     .then((response_data) => {
-      /*this.setState({
-       dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
-       loaded: true
-       });*/
       this.props.navigator.push({
         id: 'food_list',
         sid: this.props.sid,
@@ -107,7 +143,8 @@ var options = {
   getInitialState: get_initial_state,
   on_foodname_change: on_foodname_change,
   on_date_change: on_date_change,
-  create_food: create_food
+  create_food: create_food,
+  toggle_date_picker: toggle_date_picker
 };
 
 var CreateFoodView = React.createClass(options);
@@ -142,19 +179,20 @@ const styles = StyleSheet.create({
   exp_container: {
     paddingLeft: 30,
     paddingRight: 30,
-    flexDirection: 'column',
+    flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'stretch'
   },
   button: {
     height: 36,
     flex: 1,
-    //flexDirection: 'row',
+    flexDirection: 'row',
     backgroundColor: '#48BBEC',
     borderColor: '#48BBEC',
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 25,
+    marginRight: 5,
     alignSelf: 'stretch',
     justifyContent: 'center'
   },
@@ -162,6 +200,24 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     alignSelf: 'center'
+  },
+  date_picker: {
+    borderTopWidth: 1,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    height: 500,
+    borderColor: '#CCC',
+    backgroundColor: '#FFF'
+  },
+  input: {
+    height: 40,
+    justifyContent: 'center',
+    padding: 5,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginVertical: 10
   }
 });
 

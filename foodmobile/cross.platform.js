@@ -15,6 +15,7 @@ var FoodListView = require('./food.list');
 var CreateFoodView = require('./create.food');
 
 var HOST = 'http://192.168.77.183:6006';
+//var HOST = 'http://192.168.1.101:6006';
 
 function render() {
   return (
