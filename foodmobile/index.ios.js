@@ -9,5 +9,6 @@ import React, {
 } from 'react-native';
 
 var foodmobile = require('./cross.platform');
+//var foodmobile = require('./ListViewExample');
 
 AppRegistry.registerComponent('foodmobile', () => foodmobile);

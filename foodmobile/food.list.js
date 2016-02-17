@@ -11,41 +11,54 @@ import React, {
   Text,
   View,
   ListView,
-  TouchableHighlight
+  TouchableHighlight,
+  RecyclerViewBackedScrollView,
+  TouchableOpacity
 } from 'react-native';
 
 function render() {
   return (
-//      <View style={styles.container}>
-//      <Text>Welcome! {this.props.sid}</Text>
-//      <ListView
-//    dataSource={this.state.data_source}
-//    renderRow={this.render_row}
-//    style={styles.list_view}
-//      />
-//      </View>
+      <View style={{flex: 1}}>
 
-      <View>
+      <View style={styles.header}>
+      <Text style={{textAlign: 'center', marginTop: 10}}>Welcome! {this.props.username}</Text>
 
-      <View style={styles.container}>
-      <Text>Welcome! {this.props.username}</Text>
-      </View>
-
-      <TouchableHighlight style={styles.create_food}
+      <TouchableOpacity style={styles.create_food}
     onPress={this.create_food}
     underlayColor='#99d9f4'>
-      <Text style={styles.button_text}>Add</Text>
-      </TouchableHighlight>
+      <Text style={styles.button_text}>+</Text>
+      </TouchableOpacity>
+      </View>
 
       <ListView
     dataSource={this.state.data_source}
     renderRow={this.render_row}
     style={styles.list_view}
+    renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+    renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
       />
 
       </View>
   );
 }
+
+//var UIExplorerPage = require('./UIExplorerPage');
+//
+//function render() {
+//    return (
+//      <UIExplorerPage
+//        title={'Welcome'}
+//        noSpacer={true}
+//        noScroll={true}>
+//        <ListView
+//          dataSource={this.state.data_source}
+//          renderRow={this.render_row}
+//          renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+//          renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
+//        />
+//      </UIExplorerPage>
+//    );
+//}
 
 function get_initial_state() {
   return {
@@ -83,10 +96,6 @@ function component_did_mount() {
   })
     .then((response) => response.json())
     .then((response_data) => {
-      /*this.setState({
-       dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
-       loaded: true
-       });*/
       console.log(response_data);
 
       this.setState({
@@ -108,14 +117,22 @@ var options = {
 var ShowView = React.createClass(options);
 
 const styles = StyleSheet.create({
-  container: {
-    paddingLeft: 30,
-    paddingRight: 30,
-    marginTop: 65,
-    marginBottom: 30,
-    alignItems: 'center'
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 60,
+    //paddingLeft: 30,
+    //paddingRight: 30,
+    //marginTop: 65,
+    //marginBottom: 30,
+    alignItems: 'center',
+    backgroundColor: '#48BBEC',
+    justifyContent: 'center'
   },
   list_view: {
+    marginTop: 65,
     paddingLeft: 30,
     paddingRight: 30
     //backgroundColor: '#F5FCFF'
@@ -129,23 +146,32 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   create_food: {
+    position: 'absolute',
+    top: 20,
+    //left: 0,
+    right: 0,
+    //marginTop: 30,
     height: 30,
-    width: 50,
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 5,
-    marginLeft: 30,
-    alignSelf: 'stretch',
+    width: 30,
+    //flex: 1,
+    //flexDirection: 'row',
+    //backgroundColor: '#48BBEC',
+    //borderColor: '#48BBEC',
+    //borderWidth: 1,
+    //borderRadius: 8,
+    //marginBottom: 5,
+    //marginLeft: 30,
+    alignItems: 'center',
     justifyContent: 'center'
   },
   button_text: {
-    fontSize: 18,
+    fontSize: 35,
     color: 'white',
     alignSelf: 'center'
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#CCCCCC'
   }
 });
 
