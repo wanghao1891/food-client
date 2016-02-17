@@ -11,7 +11,8 @@ import React, {
 
 var SigninView = require('./signin');
 var SignupView = require('./signup');
-var FoodListView = require('./food.list');
+//var FoodListView = require('./food.list');
+var FoodListView = require('./tab.bar');
 var CreateFoodView = require('./create.food');
 
 var HOST = 'http://192.168.77.161:6006';

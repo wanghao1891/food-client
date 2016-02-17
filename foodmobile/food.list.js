@@ -42,24 +42,6 @@ function render() {
   );
 }
 
-//var UIExplorerPage = require('./UIExplorerPage');
-//
-//function render() {
-//    return (
-//      <UIExplorerPage
-//        title={'Welcome'}
-//        noSpacer={true}
-//        noScroll={true}>
-//        <ListView
-//          dataSource={this.state.data_source}
-//          renderRow={this.render_row}
-//          renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-//          renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
-//        />
-//      </UIExplorerPage>
-//    );
-//}
-
 function get_initial_state() {
   return {
     data_source: new ListView.DataSource({
