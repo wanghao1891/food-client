@@ -4,8 +4,6 @@
 
 'use strict';
 
-var moment = require('moment');
-
 import React, {
   StyleSheet,
   View,
@@ -16,6 +14,9 @@ import React, {
   TouchableOpacity,
   TouchableWithoutFeedback
 } from 'react-native';
+
+var moment = require('moment');
+var DatePicker = require('./date.picker');
 
 function render() {
   var date_picker = (
@@ -81,7 +82,14 @@ function render() {
       </TouchableHighlight>
       </View>
 
-      {this.state.date_picker_mode == 'visible' ? date_picker : <View/>}
+      {this.state.date_picker_mode == 'visible' ?
+       <DatePicker
+       date={this.state.date}
+       mode="date"
+       time_zone_offset_in_hours={this.state.time_zone_offset_in_hours * 60}
+       on_date_change={this.on_date_change}
+       toggle_date_picker={this.toggle_date_picker}
+       /> : <View/>}
 
       </View>
   );
