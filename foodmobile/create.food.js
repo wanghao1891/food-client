@@ -19,19 +19,36 @@ var moment = require('moment');
 var DatePicker = require('./date.picker');
 
 function render() {
-  var date_picker = (
+  var date_picker_purchase = (
       <View style={styles.data_picker}>
       <TouchableOpacity
-    onPress={this.toggle_date_picker}
+    onPress={this.toggle_purchase_date_picker}
     style={{padding:5, alignItems: 'flex-end'}}
       >
       <Text>Done</Text>
       </TouchableOpacity>
       <DatePicker
-    date={this.state.date}
+    date={this.state.purchase_date}
     mode='date'
     time_zone_offset_in_hours={this.state.time_zone_offset_in_hours * 60}
-    on_date_change={this.on_date_change}
+    on_date_change={this.on_purchase_date_change}
+      />
+      </View>
+  );
+
+  var date_picker_expiration = (
+      <View style={styles.data_picker}>
+      <TouchableOpacity
+    onPress={this.toggle_expiration_date_picker}
+    style={{padding:5, alignItems: 'flex-end'}}
+      >
+      <Text>Done</Text>
+      </TouchableOpacity>
+      <DatePicker
+    date={this.state.expiration_date}
+    mode='date'
+    time_zone_offset_in_hours={this.state.time_zone_offset_in_hours * 60}
+    on_date_change={this.on_expiration_date_change}
       />
       </View>
   );
@@ -43,7 +60,7 @@ function render() {
       <Text>Add Food</Text>
       </View>
 
-      <View style={styles.name_container}>
+      <View style={styles.item_container}>
       <Text style={{width: 80}}>Name: </Text>
       <TextInput
     style={styles.name_input}
@@ -54,21 +71,35 @@ function render() {
       </TextInput>
       </View>
 
-      <View style={styles.exp_container}>
-      <Text style={{width: 80}}>Exp.: </Text>
+      <View style={styles.item_container}>
+      <Text style={{width: 80}}>Pur.: </Text>
 
       <TouchableWithoutFeedback
-    onPress={this.toggle_date_picker}
+    onPress={this.toggle_purchase_date_picker}
       >
       <View style={styles.input}>
       <Text>
-      {moment(this.state.date).format('YYYY-MM-DD')}
+      {moment(this.state.purchase_date).format('MM/DD/YYYY')}
       </Text>
       </View>
       </TouchableWithoutFeedback>
       </View>
 
-      <View style={styles.name_container}>
+      <View style={styles.item_container}>
+      <Text style={{width: 80}}>Exp.: </Text>
+
+      <TouchableWithoutFeedback
+    onPress={this.toggle_expiration_date_picker}
+      >
+      <View style={styles.input}>
+      <Text>
+      {moment(this.state.expiration_date).format('MM/DD/YYYY')}
+      </Text>
+      </View>
+      </TouchableWithoutFeedback>
+      </View>
+
+      <View style={styles.item_container}>
       <TouchableHighlight style={styles.button}
     onPress={this.create_food}
     underlayColor='#99d9f4'>
@@ -82,7 +113,9 @@ function render() {
       </TouchableHighlight>
       </View>
 
-      {this.state.date_picker_mode == 'visible' ? date_picker : <View/>}
+      {this.state.date_picker_purchase_mode == 'visible' ? date_picker_purchase : <View/>}
+
+    {this.state.date_picker_expiration_mode == 'visible' ? date_picker_expiration : <View/>}
 
       </View>
   );
@@ -91,23 +124,34 @@ function render() {
 function get_initial_state() {
   return {
     foodname: '',
-    date: new Date(),
+    purchase_date: new Date(),
+    expiration_date: new Date(),
     time_zone_offset_in_hours: (-1) * (new Date()).getTimezoneOffset() / 60,
-    date_picker_mode: 'hidden'
+    date_picker_purchase_mode: 'hidden',
+    date_picker_expiration_mode: 'hidden'
   };
 }
 
-function toggle_date_picker() {
-  var mode = this.state.date_picker_mode == 'hidden' ? 'visible' : 'hidden';
-  this.setState({date_picker_mode: mode});
+function toggle_purchase_date_picker() {
+  var mode = this.state.date_picker_purchase_mode == 'hidden' ? 'visible' : 'hidden';
+  this.setState({date_picker_purchase_mode: mode});
+}
+
+function toggle_expiration_date_picker() {
+  var mode = this.state.date_picker_expiration_mode == 'hidden' ? 'visible' : 'hidden';
+  this.setState({date_picker_expiration_mode: mode});
 }
 
 function on_foodname_change(event) {
   this.setState({ foodname: event.nativeEvent.text});
 }
 
-function on_date_change(date) {
-  this.setState({date: date});
+function on_purchase_date_change(date) {
+  this.setState({purchase_date: date});
+}
+
+function on_expiration_date_change(date) {
+  this.setState({expiration_date: date});
 }
 
 function create_food() {
@@ -123,7 +167,8 @@ function create_food() {
     },
     body: JSON.stringify({
       name: this.state.foodname,
-      expiration_date: this.state.date.getTime()
+      purchase_date: this.state.purchase_date.getTime(),
+      expiration_date: this.state.expiration_date.getTime()
     })
   })
     .then((response) => response.json())
@@ -143,9 +188,11 @@ var options = {
   render: render,
   getInitialState: get_initial_state,
   on_foodname_change: on_foodname_change,
-  on_date_change: on_date_change,
+  on_purchase_date_change: on_purchase_date_change,
+  on_expiration_date_change: on_expiration_date_change,
   create_food: create_food,
-  toggle_date_picker: toggle_date_picker
+  toggle_purchase_date_picker: toggle_purchase_date_picker,
+  toggle_expiration_date_picker: toggle_expiration_date_picker
 };
 
 var CreateFoodView = React.createClass(options);
@@ -158,7 +205,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     alignItems: 'center'
   },
-  name_container: {
+  item_container: {
     paddingLeft: 30,
     paddingRight: 30,
     flexDirection: 'row',
@@ -176,13 +223,6 @@ const styles = StyleSheet.create({
     borderColor: '#48BBEC',
     borderRadius: 8,
     color: '#48BBEC'
-  },
-  exp_container: {
-    paddingLeft: 30,
-    paddingRight: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'stretch'
   },
   button: {
     height: 36,

@@ -13,7 +13,10 @@ var All = require('./food.list');
 
 function render() {
   return (
-      <TabBarIOS>
+      <TabBarIOS
+    tintColor='white'
+    barTintColor='#48BBEC'
+      >
       <TabBarIOS.Item
     title='All'
     icon={require('./flux.png')}

@@ -54,7 +54,10 @@ function get_initial_state() {
 function render_row(e) {
   return (
       <View style={styles.list_element_view}>
-      <Text>{e.name} {moment.unix(e.expiration_date/1000).format('YYYY-MM-DD')}</Text>
+      <Text style={{width: 80}}>{e.name}</Text>
+      <Text style={{width: 80}}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
+      <Text> - </Text>
+      <Text style={{width: 80}}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
       </View>
   );
 }
@@ -114,7 +117,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   list_view: {
-    marginTop: 65,
+//    flex: 2,
+//    flexDirection: 'row',
+    marginTop: 60,
     paddingLeft: 30,
     paddingRight: 30
     //backgroundColor: '#F5FCFF'

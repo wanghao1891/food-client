@@ -88,13 +88,17 @@ function signin() {
   })
     .then((response) => response.json())
     .then((response_data) => {
+      console.log(this.state.username);
+      console.log(response_data);
+
       this.props.navigator.push({
         id: 'food_list',
         sid: response_data.sid,
         username: this.state.username
       });
-      console.log(this.state.username);
-      console.log(response_data);
+    })
+    .catch((err) => {
+      console.warn(err);
     })
     .done();
 }
