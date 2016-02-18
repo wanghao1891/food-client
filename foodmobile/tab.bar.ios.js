@@ -6,7 +6,9 @@
 
 import React, {
   StyleSheet,
-  TabBarIOS
+  TabBarIOS,
+  Text,
+  View
 } from 'react-native';
 
 var All = require('./food.list');
@@ -18,7 +20,7 @@ function render() {
     barTintColor='#48BBEC'
       >
       <TabBarIOS.Item
-    title='All'
+    title='Food'
     icon={require('./flux.png')}
     selected={this.state.selected_tab === 'all'}
     onPress={() => {
@@ -36,7 +38,7 @@ function render() {
       </TabBarIOS.Item>
 
       <TabBarIOS.Item
-    title='Experied'
+    title='Me'
     icon={require('./flux.png')}
     selected={this.state.selected_tab === 'experied'}
     onPress={() => {
@@ -45,12 +47,9 @@ function render() {
       });
     }}
       >
-      <All
-    navigator={this.props.navigator}
-    host={this.props.host}
-    sid={this.props.sid}
-    username={this.props.username}
-      />
+      <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+      <Text>Coming soon!</Text>
+      </View>
       </TabBarIOS.Item>
       </TabBarIOS>
   );

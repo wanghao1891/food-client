@@ -4,8 +4,6 @@
 
 'use strict';
 
-var moment = require('moment');
-
 import React, {
   StyleSheet,
   Text,
@@ -16,6 +14,9 @@ import React, {
   TouchableOpacity
 } from 'react-native';
 
+var moment = require('moment');
+var Popover = require('./popover');
+
 function render() {
   return (
       <View style={{flex: 1}}>
@@ -23,10 +24,26 @@ function render() {
       <View style={styles.header}>
       <Text style={{textAlign: 'center', marginTop: 10}}>Welcome! {this.props.username}</Text>
 
+      <TouchableOpacity
+    style={styles.filter_food}
+    ref='button'
+    onPress={this.show_popover}
+    underlayColor='#99d9f4'>
+      <Text style={styles.filter_food_text}>v</Text>
+      </TouchableOpacity>
+
+      <Popover
+    isVisible={this.state.popover_isvisible}
+    fromRect={this.state.popover_rect}
+    onClose={this.close_popover}
+      >
+      <Text>popover</Text>
+      </Popover>
+
       <TouchableOpacity style={styles.create_food}
     onPress={this.create_food}
     underlayColor='#99d9f4'>
-      <Text style={styles.button_text}>+</Text>
+      <Text style={styles.create_food_text}>+</Text>
       </TouchableOpacity>
       </View>
 
@@ -47,8 +64,23 @@ function get_initial_state() {
     data_source: new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2
     }),
-    loaded: false
+    loaded: false,
+    popover_isvisible: false,
+    popover_rect: {}
   };
+}
+
+function show_popover() {
+  this.refs.button.measure((ox, oy, width, height, px, py) => {
+    this.setState({
+      popover_isvisible: true,
+      popover_rect: {x: px, y: py, width: width, height: height}
+    });
+  });
+}
+
+function close_popover() {
+  this.setState({popover_isvisible: false});
 }
 
 function render_row(e) {
@@ -96,7 +128,9 @@ var options = {
   getInitialState: get_initial_state,
   render_row: render_row,
   componentDidMount: component_did_mount,
-  create_food: create_food
+  create_food: create_food,
+  show_popover: show_popover,
+  close_popover: close_popover
 };
 
 var ShowView = React.createClass(options);
@@ -132,11 +166,25 @@ const styles = StyleSheet.create({
     //backgroundColor: '#F5FCFF',
     marginTop: 20
   },
+  filter_food: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    height: 30,
+    width: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  filter_food_text: {
+    fontSize: 28,
+    color: 'white',
+    alignSelf: 'center'
+  },
   create_food: {
     position: 'absolute',
     top: 20,
     //left: 0,
-    right: 0,
+    right: 20,
     //marginTop: 30,
     height: 30,
     width: 30,
@@ -151,8 +199,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  button_text: {
-    fontSize: 35,
+  create_food_text: {
+    fontSize: 30,
     color: 'white',
     alignSelf: 'center'
   },
