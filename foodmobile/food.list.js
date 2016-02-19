@@ -11,11 +11,19 @@ import React, {
   ListView,
   TouchableHighlight,
   RecyclerViewBackedScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  ActionSheetIOS
 } from 'react-native';
 
 var moment = require('moment');
 var Popover = require('./popover');
+
+var filters = [
+  'All',
+  'Expiring',
+  'Expired',
+  'Cancel'
+];
 
 function render() {
   return (
@@ -27,9 +35,9 @@ function render() {
       <TouchableOpacity
     style={styles.filter_food}
     ref='button'
-    onPress={this.show_popover}
+    onPress={this.show_filter}
     underlayColor='#99d9f4'>
-      <Text style={styles.filter_food_text}>v</Text>
+      <Text style={styles.filter_food_text}>Y</Text>
       </TouchableOpacity>
 
       <Popover
@@ -84,6 +92,41 @@ function get_initial_state() {
   };
 }
 
+function show_filter() {
+  ActionSheetIOS.showActionSheetWithOptions({
+    options: filters,
+    cancelButtonIndex: 3
+  }, (button_index) => {
+    this.get_food_list(filters[button_index].toLowerCase());
+  });
+}
+
+function get_food_list(type) {
+  var url = this.props.host + '/api/food/' + type;
+  console.log('get_food_list url:', url);
+  fetch(this.props.host + '/api/food/' + type, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      sid: this.props.sid
+    }
+  })
+    .then((response) => response.json())
+    .then((response_data) => {
+      console.log(response_data);
+
+      this.setState({
+        data_source: this.state.data_source.cloneWithRows(response_data.data),
+        loaded: true
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .done();
+}
+
 function show_popover() {
   this.refs.button.measure((ox, oy, width, height, px, py) => {
     this.setState({
@@ -117,24 +160,7 @@ function create_food() {
 }
 
 function component_did_mount() {
-  fetch(this.props.host + '/api/food', {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      sid: this.props.sid
-    }
-  })
-    .then((response) => response.json())
-    .then((response_data) => {
-      console.log(response_data);
-
-      this.setState({
-        data_source: this.state.data_source.cloneWithRows(response_data.data),
-        loaded: true
-      });
-    })
-    .done();
+  this.get_food_list('all');
 }
 
 var options = {
@@ -144,7 +170,9 @@ var options = {
   componentDidMount: component_did_mount,
   create_food: create_food,
   show_popover: show_popover,
-  close_popover: close_popover
+  close_popover: close_popover,
+  show_filter: show_filter,
+  get_food_list: get_food_list
 };
 
 var ShowView = React.createClass(options);
@@ -190,7 +218,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   filter_food_text: {
-    fontSize: 28,
+    fontSize: 20,
     color: 'white',
     alignSelf: 'center'
   },
