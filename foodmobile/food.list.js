@@ -19,10 +19,11 @@ var moment = require('moment');
 var Popover = require('./popover');
 
 var filters = [
-  'All',
-  'Expiring',
+  'Cancel',
   'Expired',
-  'Cancel'
+  'Expiring',
+  'Normal',
+  'All',
 ];
 
 function render() {
@@ -95,13 +96,17 @@ function get_initial_state() {
 function show_filter() {
   ActionSheetIOS.showActionSheetWithOptions({
     options: filters,
-    cancelButtonIndex: 3
+    cancelButtonIndex: 0
   }, (button_index) => {
     this.get_food_list(filters[button_index].toLowerCase());
   });
 }
 
 function get_food_list(type) {
+  if(type === 'cancel') {
+    return;
+  }
+
   var url = this.props.host + '/api/food/' + type;
   console.log('get_food_list url:', url);
   fetch(this.props.host + '/api/food/' + type, {
