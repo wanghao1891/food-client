@@ -37,7 +37,21 @@ function render() {
     fromRect={this.state.popover_rect}
     onClose={this.close_popover}
       >
-      <Text>popover</Text>
+
+      <View style={{backgroundColor: '#48BBEC'}}>
+      <TouchableHighlight>
+      <Text>All</Text>
+      </TouchableHighlight>
+      <TouchableHighlight>
+
+      <Text>Expiring</Text>
+      </TouchableHighlight>
+      <TouchableHighlight>
+
+      <Text>Expired</Text>
+      </TouchableHighlight>
+      </View>
+
       </Popover>
 
       <TouchableOpacity style={styles.create_food}
@@ -74,7 +88,7 @@ function show_popover() {
   this.refs.button.measure((ox, oy, width, height, px, py) => {
     this.setState({
       popover_isvisible: true,
-      popover_rect: {x: px, y: py, width: width, height: height}
+      popover_rect: {x: px, y: py + 60, width: width, height: height}
     });
   });
 }
