@@ -56,8 +56,16 @@ function render() {
   return (
       <View>
 
-      <View style={styles.container}>
-      <Text>Add Food</Text>
+      <View style={styles.header}>
+      <Text style={{textAlign: 'center', marginTop: 10}}>Add Food</Text>
+
+      <TouchableOpacity
+    style={styles.cancel}
+    ref='button'
+    onPress={this.props.navigator.pop}
+    underlayColor='#99d9f4'>
+      <Text style={styles.cancel_text}>Cancel</Text>
+      </TouchableOpacity>
       </View>
 
       <View style={styles.item_container}>
@@ -104,12 +112,6 @@ function render() {
     onPress={this.create_food}
     underlayColor='#99d9f4'>
       <Text style={styles.buttonText}>Add</Text>
-      </TouchableHighlight>
-
-      <TouchableHighlight style={styles.button}
-    onPress={this.props.navigator.pop}
-    underlayColor='#99d9f4'>
-      <Text style={styles.buttonText}>Cancel</Text>
       </TouchableHighlight>
       </View>
 
@@ -216,6 +218,7 @@ const styles = StyleSheet.create({
     //width: 200,
     height: 36,
     padding: 4,
+    marginTop: 10,
     marginBottom: 5,
     flex: 4,
     fontSize: 18,
@@ -259,6 +262,36 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginVertical: 10
+  },
+  header: {
+    //position: 'absolute',
+    //top: 0,
+    //left: 0,
+    //right: 0,
+    height: 60,
+    //paddingLeft: 30,
+    //paddingRight: 30,
+    //marginTop: 65,
+    //marginBottom: 30,
+    alignItems: 'center',
+    backgroundColor: '#48BBEC',
+    justifyContent: 'center'
+  },
+  cancel: {
+    //borderWidth: 1,
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    height: 30,
+    width: 60,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  cancel_text: {
+    //borderWidth: 1,
+    fontSize: 18,
+    color: 'white',
+    alignSelf: 'center'
   }
 });
 
