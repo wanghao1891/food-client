@@ -15,6 +15,7 @@ function render() {
     mode={this.props.mode}
     timeZoneOffsetInMinutes={this.props.time_zone_offset_in_hours * 60}
     onDateChange={this.props.on_date_change}
+    style={{backgroundColor: 'white'}}
       />
   );
 }

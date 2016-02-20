@@ -10,13 +10,15 @@ import React, {
   Text,
   TextInput,
   TouchableHighlight,
-  DatePickerIOS,
   TouchableOpacity,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Picker,
+  Dimensions
 } from 'react-native';
 
 var moment = require('moment');
 var DatePicker = require('./date.picker');
+var Screen = Dimensions.get('window');
 
 function render() {
   var date_picker_purchase = (
@@ -36,6 +38,33 @@ function render() {
       </View>
   );
 
+  date_picker_purchase = (
+      <View style={date_picker_styles.container}>
+      <View style={date_picker_styles.actionSheetContainer}>
+      <TouchableOpacity
+    style={date_picker_styles.touchableOpacity}
+    activeOpacity={1}
+    onPress={this.on_purchase_date_close} />
+      <DatePicker
+    date={this.state.purchase_date}
+    mode='date'
+    time_zone_offset_in_hours={this.state.time_zone_offset_in_hours * 60}
+    on_date_change={this.on_purchase_date_change}
+      />
+      <View style={date_picker_styles.separator}/>
+      <TouchableOpacity
+    onPress={this.on_purchase_date_close}
+    style={date_picker_styles.button}>
+      <Text>Done</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+    style={date_picker_styles.touchableOpacity}
+    activeOpacity={1}
+    onPress={this.on_purchase_date_close} />
+      </View>
+      </View>
+  );
+
   var date_picker_expiration = (
       <View style={styles.data_picker}>
       <TouchableOpacity
@@ -51,6 +80,43 @@ function render() {
     on_date_change={this.on_expiration_date_change}
       />
       </View>
+  );
+
+  date_picker_expiration = (
+      <View style={date_picker_styles.container}>
+      <View style={date_picker_styles.actionSheetContainer}>
+      <TouchableOpacity
+    style={date_picker_styles.touchableOpacity}
+    activeOpacity={1}
+    onPress={this.on_expiration_date_close} />
+      <DatePicker
+    date={this.state.expiration_date}
+    mode='date'
+    time_zone_offset_in_hours={this.state.time_zone_offset_in_hours * 60}
+    on_date_change={this.on_expiration_date_change}
+      />
+      <View style={date_picker_styles.separator}/>
+      <TouchableOpacity
+    onPress={this.on_expiration_date_close}
+    style={date_picker_styles.button}>
+      <Text>Done</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+    style={date_picker_styles.touchableOpacity}
+    activeOpacity={1}
+    onPress={this.on_expiration_date_close} />
+      </View>
+      </View>
+  );
+
+  var foodname_picker = (
+      <Picker
+    style={styles.name_picker}
+    selectedValue={this.state.language}
+    onValueChange={(lang) => this.setState({language: lang})}>
+      <Picker.Item label="Java" value="java" />
+      <Picker.Item label="JavaScript" value="js" />
+      </Picker>
   );
 
   return (
@@ -75,6 +141,8 @@ function render() {
     onChange={this.on_foodname_change}
     value={this.state.foodname}
     placeholder='Name'
+    onFocus={this.toggle_foodname_picker}
+    onBlur={this.toggle_foodname_picker}
       >
       </TextInput>
       </View>
@@ -119,6 +187,8 @@ function render() {
 
     {this.state.date_picker_expiration_mode == 'visible' ? date_picker_expiration : <View/>}
 
+    {this.state.foodname_picker_mode == 'visible' ? foodname_picker : <View/>}
+
       </View>
   );
 }
@@ -130,18 +200,32 @@ function get_initial_state() {
     expiration_date: new Date(),
     time_zone_offset_in_hours: (-1) * (new Date()).getTimezoneOffset() / 60,
     date_picker_purchase_mode: 'hidden',
-    date_picker_expiration_mode: 'hidden'
+    date_picker_expiration_mode: 'hidden',
+    foodname_picker_mode: 'hidden'
   };
 }
 
 function toggle_purchase_date_picker() {
   var mode = this.state.date_picker_purchase_mode == 'hidden' ? 'visible' : 'hidden';
   this.setState({date_picker_purchase_mode: mode});
+
+//  if(mode == 'visible' && this.state.date_picker_expiration_mode == 'visible') {
+//    this.setState({date_picker_expiration_mode: 'hidden'});
+//  }
 }
 
 function toggle_expiration_date_picker() {
   var mode = this.state.date_picker_expiration_mode == 'hidden' ? 'visible' : 'hidden';
   this.setState({date_picker_expiration_mode: mode});
+
+//  if(mode == 'visible' && this.state.date_picker_purchase_mode == 'visible') {
+//    this.setState({date_picker_purchase_mode: 'hidden'});
+//  }
+}
+
+function toggle_foodname_picker() {
+//  var mode = this.state.foodname_picker_mode == 'hidden' ? 'visible' : 'hidden';
+//  this.setState({foodname_picker_mode: mode});
 }
 
 function on_foodname_change(event) {
@@ -152,8 +236,24 @@ function on_purchase_date_change(date) {
   this.setState({purchase_date: date});
 }
 
+function on_purchase_date_close() {
+  this.setState({date_picker_purchase_mode: 'hidden'});
+}
+
 function on_expiration_date_change(date) {
   this.setState({expiration_date: date});
+}
+
+function on_expiration_date_close() {
+  this.setState({date_picker_expiration_mode: 'hidden'});
+}
+
+function on_foodname_focus() {
+  this.toggle_name_picker();
+}
+
+function on_foodname_blur() {
+  this.toggle_name_picker();
 }
 
 function create_food() {
@@ -194,10 +294,46 @@ var options = {
   on_expiration_date_change: on_expiration_date_change,
   create_food: create_food,
   toggle_purchase_date_picker: toggle_purchase_date_picker,
-  toggle_expiration_date_picker: toggle_expiration_date_picker
+  toggle_expiration_date_picker: toggle_expiration_date_picker,
+  toggle_foodname_picker: toggle_foodname_picker,
+  on_purchase_date_close: on_purchase_date_close,
+  on_expiration_date_close: on_expiration_date_close
 };
 
 var CreateFoodView = React.createClass(options);
+
+var date_picker_styles = StyleSheet.create({
+  container:{
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+    position: 'absolute'
+
+  },
+  actionSheetContainer: {
+    height: Screen.height,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  datePicker: {
+    backgroundColor: 'white'
+  },
+  touchableOpacity: {
+    flex: 1
+  },
+  button: {
+    paddingVertical: 10,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#CCC'
+  }
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -254,6 +390,16 @@ const styles = StyleSheet.create({
     height: 500,
     borderColor: '#CCC',
     backgroundColor: '#FFF'
+  },
+  name_picker: {
+    borderTopWidth: 1,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    height: 100,
+    borderColor: '#CCC',
+    backgroundColor: '#48BBEC'
   },
   input: {
     height: 40,
