@@ -16,35 +16,40 @@ import React, {
 function render() {
   return (
       <View style={styles.container}>
-        <Text style={styles.description}>
-          Food
-        </Text>
-        <Text style={styles.description}>
-          Record the detail of food
-        </Text>
-        <View style={styles.flowRight}>
-          <TextInput
-             style={styles.signInput}
-             onChangeText={(username) => this.setState({username})}
-            value={this.props.username}
-             placeholder='Name'/>
-          <TextInput
-             style={styles.signInput}
-             onChange={this.on_password_change}
-             value={this.props.password}
-             secureTextEntry={true}
-             placeholder='Password'/>
-        </View>
-        <TouchableHighlight style={styles.button}
-                            onPress={this.signin}
-                            underlayColor='#99d9f4'>
-          <Text style={styles.buttonText}>Sign in</Text>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.button}
+      <Text style={styles.description}>
+      Food
+    </Text>
+      <Text style={styles.description}>
+      Record the detail of food
+    </Text>
+      <View style={styles.flowRight}>
+      <TextInput
+    style={styles.signInput}
+    onChangeText={(username) => this.setState({username})}
+    value={this.props.username}
+    placeholder='Name'/>
+      <TextInput
+    style={styles.signInput}
+    onChange={this.on_password_change}
+    value={this.props.password}
+    secureTextEntry={true}
+    placeholder='Password'/>
+      </View>
+      <TouchableHighlight style={styles.button}
+    onPress={this.signin}
+    underlayColor='#99d9f4'>
+      <Text style={styles.buttonText}>Sign in</Text>
+      </TouchableHighlight>
+      <TouchableHighlight style={styles.button}
     onPress={this.show_singup_view}
-                            underlayColor='#99d9f4'>
-          <Text style={styles.buttonText}>Sign up</Text>
-        </TouchableHighlight>
+    underlayColor='#99d9f4'>
+      <Text style={styles.buttonText}>Sign up</Text>
+      </TouchableHighlight>
+      <TouchableHighlight style={styles.button}
+    onPress={this.show_configuration_view}
+    underlayColor='#99d9f4'>
+      <Text style={styles.buttonText}>Setting</Text>
+      </TouchableHighlight>
       </View>
   );
 }
@@ -66,7 +71,14 @@ function on_password_change(event) {
 
 function show_singup_view() {
   this.props.navigator.push({
-    id: 'signup'
+    id: 'signup',
+    host: this.props.host
+  });
+}
+
+function show_configuration_view() {
+  this.props.navigator.push({
+    id: 'configuration'
   });
 }
 
@@ -94,7 +106,8 @@ function signin() {
       this.props.navigator.push({
         id: 'food_list',
         sid: response_data.sid,
-        username: this.state.username
+        username: this.state.username,
+        host: this.props.host
       });
     })
     .catch((err) => {
@@ -109,7 +122,8 @@ var options = {
   signin: signin,
   getInitialState: get_initial_state,
   on_username_change: on_username_change,
-  on_password_change: on_password_change
+  on_password_change: on_password_change,
+  show_configuration_view: show_configuration_view
 };
 
 var SigninView = React.createClass(options);

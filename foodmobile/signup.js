@@ -77,14 +77,11 @@ function signup() {
   })
     .then((response) => response.json())
     .then((response_data) => {
-      /*this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
-        loaded: true
-       });*/
       this.props.navigator.push({
         id: 'food_list',
         sid: response_data.sid,
-        username: this.state.username
+        username: this.state.username,
+        host: this.props.host
       });
       console.log(response_data);
     })

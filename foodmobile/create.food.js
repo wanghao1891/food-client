@@ -283,7 +283,8 @@ function create_food() {
       this.props.navigator.push({
         id: 'food_list',
         sid: this.props.sid,
-        username: this.props.username
+        username: this.props.username,
+        host: this.props.host
       });
       console.log(this.state.username);
       console.log(response_data);

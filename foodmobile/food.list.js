@@ -160,7 +160,8 @@ function create_food() {
   this.props.navigator.push({
     id: 'create_food',
     sid: this.props.sid,
-    username: this.props.username
+    username: this.props.username,
+    host: this.props.host
   });
 }
 
