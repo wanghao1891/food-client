@@ -19,6 +19,7 @@ import React, {
 var moment = require('moment');
 var DatePicker = require('./date.picker');
 var Screen = Dimensions.get('window');
+var dismiss_keyboard = require('dismissKeyboard');
 
 function render() {
   var date_picker_purchase = (
@@ -209,6 +210,8 @@ function toggle_purchase_date_picker() {
   var mode = this.state.date_picker_purchase_mode == 'hidden' ? 'visible' : 'hidden';
   this.setState({date_picker_purchase_mode: mode});
 
+  dismiss_keyboard();
+
 //  if(mode == 'visible' && this.state.date_picker_expiration_mode == 'visible') {
 //    this.setState({date_picker_expiration_mode: 'hidden'});
 //  }
@@ -217,6 +220,8 @@ function toggle_purchase_date_picker() {
 function toggle_expiration_date_picker() {
   var mode = this.state.date_picker_expiration_mode == 'hidden' ? 'visible' : 'hidden';
   this.setState({date_picker_expiration_mode: mode});
+
+  dismiss_keyboard();
 
 //  if(mode == 'visible' && this.state.date_picker_purchase_mode == 'visible') {
 //    this.setState({date_picker_purchase_mode: 'hidden'});
