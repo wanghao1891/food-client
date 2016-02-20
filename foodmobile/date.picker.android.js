@@ -4,16 +4,20 @@
 
 'use strict';
 
-import React from 'react-native';
+import React, {
+  View
+} from 'react-native';
 
 var CalendarPicker = require('react-native-calendar-picker');
 
 function render() {
   return (
+      <View style={{backgroundColor: 'white'}}>
       <CalendarPicker
     selectedDate={this.props.date}
     onDateChange={this.props.on_date_change}
       />
+      </View>
   );
 }
 
