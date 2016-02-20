@@ -30,7 +30,7 @@ function render() {
       <TextInput
     style={styles.signInput}
     onChangeText={(host) => this.setState({host})}
-    value={this.props.username}
+    value={this.state.host}
     placeholder='Host'/>
       </View>
       <TouchableHighlight
@@ -45,7 +45,7 @@ function render() {
 
 function get_initial_state() {
   return {
-    host: ''
+    host: '192.168.77.160:6006'
   };
 }
 
