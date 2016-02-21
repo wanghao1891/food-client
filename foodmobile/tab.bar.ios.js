@@ -16,8 +16,7 @@ var All = require('./food.list');
 function render() {
   return (
       <TabBarIOS
-    tintColor='white'
-    barTintColor='#48BBEC'
+    barTintColor='white'
       >
       <TabBarIOS.Item
     title='Food'

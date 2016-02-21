@@ -19,22 +19,27 @@ function render() {
       <Text style={styles.description}>
       Food
     </Text>
-      <Text style={styles.description}>
+      <Text style={styles.description, {fontSize: 15, marginBottom: 5}}>
       Record the detail of food
     </Text>
-      <View style={styles.flowRight}>
+
+      <View style={{borderBottomWidth: 1, alignItems: 'center', alignSelf: 'stretch'}}>
       <TextInput
     style={styles.signInput}
     onChangeText={(username) => this.setState({username})}
-    value={this.props.username}
+    value={this.state.username}
     placeholder='Name'/>
+      </View>
+
+      <View style={{borderBottomWidth: 1, alignItems: 'center', alignSelf: 'stretch'}}>
       <TextInput
     style={styles.signInput}
     onChange={this.on_password_change}
-    value={this.props.password}
+    value={this.state.password}
     secureTextEntry={true}
     placeholder='Password'/>
       </View>
+
       <TouchableHighlight style={styles.button}
     onPress={this.signin}
     underlayColor='#99d9f4'>
@@ -56,8 +61,8 @@ function render() {
 
 function get_initial_state() {
   return {
-    username: '',
-    password: ''
+    username: 'John',
+    password: '1'
   };
 }
 
@@ -137,8 +142,8 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 20,
     fontSize: 18,
-    textAlign: 'center',
-    color: '#656565'
+    //color: '#656565'
+    textAlign: 'center'
   },
   flowRight: {
     flexDirection: 'column',
@@ -147,31 +152,40 @@ const styles = StyleSheet.create({
   },
   signInput: {
     //width: 200,
+    //borderColor: '#48BBEC',
+    //borderRadius: 8,
+    //color: '#48BBEC',
+    //borderWidth: 1,
+    //borderBottomWidth: 1,
+    //borderLeftWidth: 1,
+    //borderRightWidth: 1,
+    justifyContent: 'center',
+    textAlign: 'center',
     height: 36,
-    padding: 4,
+    //padding: 4,
     marginBottom: 5,
     flex: 4,
-    fontSize: 18,
-    borderWidth: 1,
-    borderColor: '#48BBEC',
-    borderRadius: 8,
-    color: '#48BBEC'
+    fontSize: 15
   },
   button: {
-    height: 36,
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 5,
-    alignSelf: 'stretch',
+    height: 30,
+    width: 60,
+    //flex: 1,
+    //flexDirection: 'row',
+    //backgroundColor: '#48BBEC',
+    //borderColor: '#48BBEC',
+    //borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    //borderRadius: 8,
+    //marginBottom: 5,
+    marginTop: 20,
+    alignSelf: 'center',
     justifyContent: 'center'
   },
   buttonText: {
-    fontSize: 18,
-    color: 'white',
+    //fontSize: 18,
+    //color: 'white',
     alignSelf: 'center'
   }
 });

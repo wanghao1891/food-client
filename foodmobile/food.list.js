@@ -12,11 +12,13 @@ import React, {
   TouchableHighlight,
   RecyclerViewBackedScrollView,
   TouchableOpacity,
-  ActionSheetIOS
+  ActionSheetIOS,
+  Dimensions
 } from 'react-native';
 
 var moment = require('moment');
 var Popover = require('./popover');
+var Screen = Dimensions.get('window');
 
 var filters = [
   'Cancel',
@@ -38,7 +40,7 @@ function render() {
     ref='button'
     onPress={this.show_filter}
     underlayColor='#99d9f4'>
-      <Text style={styles.filter_food_text}>Y</Text>
+      <Text style={styles.filter_food_text}>Filter</Text>
       </TouchableOpacity>
 
       <Popover
@@ -66,10 +68,17 @@ function render() {
       <TouchableOpacity style={styles.create_food}
     onPress={this.create_food}
     underlayColor='#99d9f4'>
-      <Text style={styles.create_food_text}>+</Text>
+      <Text style={styles.create_food_text}>Add</Text>
       </TouchableOpacity>
       </View>
 
+      <View style={styles.list_header}>
+      <Text style={styles.list_text}>Name</Text>
+      <Text style={styles.list_text}>Purchase</Text>
+      <Text style={styles.list_text}>Expiration</Text>
+      </View>
+
+      <View style={{height: Screen.height - 120, borderBottomWidth: 1}}>
       <ListView
     dataSource={this.state.data_source}
     renderRow={this.render_row}
@@ -77,7 +86,7 @@ function render() {
     renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
     renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
       />
-
+      </View>
       </View>
   );
 }
@@ -148,10 +157,10 @@ function close_popover() {
 function render_row(e) {
   return (
       <View style={styles.list_element_view}>
-      <Text style={{width: 80}}>{e.name}</Text>
-      <Text style={{width: 80}}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
+      <Text style={styles.list_text}>{e.name}</Text>
+      <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
       <Text> - </Text>
-      <Text style={{width: 80}}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
+      <Text style={styles.list_text}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
       </View>
   );
 }
@@ -185,23 +194,37 @@ var ShowView = React.createClass(options);
 
 const styles = StyleSheet.create({
   header: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 60,
+    borderBottomWidth: 1,
+    //position: 'absolute',
+    //top: 0,
+    //left: 0,
+    //right: 0,
+    height: 50,
     //paddingLeft: 30,
     //paddingRight: 30,
     //marginTop: 65,
     //marginBottom: 30,
     alignItems: 'center',
-    backgroundColor: '#48BBEC',
+    //backgroundColor: '#48BBEC',
     justifyContent: 'center'
+  },
+  list_header: {
+//    paddingLeft: 30,
+//    paddingRight: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    height: 20,
+    borderBottomWidth: 1
+  },
+  list_text: {
+    //borderWidth: 1,
+    width: 80
   },
   list_view: {
 //    flex: 2,
 //    flexDirection: 'row',
-    marginTop: 60,
+    //marginTop: 60,
     paddingLeft: 30,
     paddingRight: 30
     //backgroundColor: '#F5FCFF'
@@ -224,8 +247,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   filter_food_text: {
-    fontSize: 20,
-    color: 'white',
+    //fontSize: 20,
+    //color: 'white',
     alignSelf: 'center'
   },
   create_food: {
@@ -248,8 +271,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   create_food_text: {
-    fontSize: 30,
-    color: 'white',
+    //fontSize: 30,
+    //color: 'white',
     alignSelf: 'center'
   },
   separator: {
