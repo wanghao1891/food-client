@@ -154,14 +154,30 @@ function close_popover() {
   this.setState({popover_isvisible: false});
 }
 
+var Swipeout = require('react-native-swipeout');
+
 function render_row(e) {
+  var swipeoutBtns = [
+    {
+      text: 'Button',
+      backgroundColor: 'red'
+    }
+  ];
+
   return (
+      <Swipeout
+    right={swipeoutBtns}
+    backgroundColor='white'
+      >
+      <TouchableOpacity>
       <View style={styles.list_element_view}>
       <Text style={styles.list_text}>{e.name}</Text>
       <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
       <Text> - </Text>
       <Text style={styles.list_text}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
       </View>
+      </TouchableOpacity>
+      </Swipeout>
   );
 }
 
@@ -219,12 +235,15 @@ const styles = StyleSheet.create({
   },
   list_text: {
     //borderWidth: 1,
+    //height: 50,
     width: 80
   },
   list_view: {
 //    flex: 2,
 //    flexDirection: 'row',
     //marginTop: 60,
+    //height: 300,
+    //paddingBottom: 20,
     paddingLeft: 30,
     paddingRight: 30
     //backgroundColor: '#F5FCFF'
