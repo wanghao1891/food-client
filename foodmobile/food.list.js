@@ -19,6 +19,7 @@ import React, {
 var moment = require('moment');
 var Popover = require('./popover');
 var Screen = Dimensions.get('window');
+var Swipeout = require('react-native-swipeout');
 
 var filters = [
   'Cancel',
@@ -118,7 +119,7 @@ function get_food_list(type) {
 
   var url = this.props.host + '/api/food/' + type;
   console.log('get_food_list url:', url);
-  fetch(this.props.host + '/api/food/' + type, {
+  fetch(url, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -154,20 +155,20 @@ function close_popover() {
   this.setState({popover_isvisible: false});
 }
 
-var Swipeout = require('react-native-swipeout');
-
 function render_row(e) {
-  var swipeoutBtns = [
+  let swipeout_buttons = [
     {
-      text: 'Button',
-      backgroundColor: 'red'
+      text: 'Delete',
+      backgroundColor: 'red',
+      onPress: this.delete_food.bind(this, e)
     }
   ];
 
   return (
       <Swipeout
-    right={swipeoutBtns}
+    right={swipeout_buttons}
     backgroundColor='white'
+    autoClose={true}
       >
       <TouchableOpacity>
       <View style={styles.list_element_view}>
@@ -190,6 +191,29 @@ function create_food() {
   });
 }
 
+function delete_food(food) {
+  var url = this.props.host + '/api/food/' + food._id;
+  console.log('delete_food url:', url);
+  fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      sid: this.props.sid
+    }
+  })
+    .then((response) => response.json())
+    .then((response_data) => {
+      console.log(response_data);
+
+      this.get_food_list('all');
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .done();
+}
+
 function component_did_mount() {
   this.get_food_list('all');
 }
@@ -203,7 +227,8 @@ var options = {
   show_popover: show_popover,
   close_popover: close_popover,
   show_filter: show_filter,
-  get_food_list: get_food_list
+  get_food_list: get_food_list,
+  delete_food: delete_food
 };
 
 var ShowView = React.createClass(options);

@@ -8,6 +8,7 @@
   "dependencies": {
     "react-native": "0.20.0-rc1",
     "react-native-calendar-picker": "^1.0.1",
-    "react-native-tab-navigator": "^0.2.16"
+    "react-native-tab-navigator": "^0.2.16",
+    "react-native-swipeout": "^2.0.12"
   }
 }

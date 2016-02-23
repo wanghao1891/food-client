@@ -17,7 +17,7 @@ var CreateFoodView = require('./create.food');
 var ConfigurationView = require('./configuration');
 
 var HOST = 'http://192.168.77.160:6006';
-//var HOST = 'http://192.168.1.103:6006';
+//var HOST = 'http://192.168.1.100:6006';
 
 function render() {
   return (
