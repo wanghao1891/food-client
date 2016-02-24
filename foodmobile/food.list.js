@@ -142,6 +142,16 @@ function get_food_list(type) {
     .done();
 }
 
+function show_food_detail(food) {
+  this.props.navigator.push({
+    id: 'food_detail',
+    sid: this.props.sid,
+    username: this.props.username,
+    host: this.props.host,
+    food: food
+  });
+}
+
 function show_popover() {
   this.refs.button.measure((ox, oy, width, height, px, py) => {
     this.setState({
@@ -170,7 +180,9 @@ function render_row(e) {
     backgroundColor='white'
     autoClose={true}
       >
-      <TouchableOpacity>
+      <TouchableOpacity
+    onPress={this.show_food_detail.bind(this, e)}
+      >
       <View style={styles.list_element_view}>
       <Text style={styles.list_text}>{e.name}</Text>
       <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
@@ -228,7 +240,8 @@ var options = {
   close_popover: close_popover,
   show_filter: show_filter,
   get_food_list: get_food_list,
-  delete_food: delete_food
+  delete_food: delete_food,
+  show_food_detail: show_food_detail
 };
 
 var ShowView = React.createClass(options);
