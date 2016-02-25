@@ -20,6 +20,7 @@ var moment = require('moment');
 var Popover = require('./popover');
 var Screen = Dimensions.get('window');
 var Swipeout = require('react-native-swipeout');
+var _ = require('lodash');
 
 var filters = [
   'Cancel',
@@ -66,6 +67,12 @@ function render() {
 
       </Popover>
 
+      <TouchableOpacity style={styles.edit_food}
+    onPress={this.edit_food}
+    underlayColor='#99d9f4'>
+      <Text style={styles.edit_food_text}>Edit</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.create_food}
     onPress={this.create_food}
     underlayColor='#99d9f4'>
@@ -99,7 +106,9 @@ function get_initial_state() {
     }),
     loaded: false,
     popover_isvisible: false,
-    popover_rect: {}
+    popover_rect: {},
+    edit_mode: false,
+    food_list: []
   };
 }
 
@@ -133,6 +142,7 @@ function get_food_list(type) {
 
       this.setState({
         data_source: this.state.data_source.cloneWithRows(response_data.data),
+        food_list: response_data.data,
         loaded: true
       });
     })
@@ -166,32 +176,46 @@ function close_popover() {
 }
 
 function render_row(e) {
-  let swipeout_buttons = [
-    {
-      text: 'Delete',
-      backgroundColor: 'red',
-      onPress: this.delete_food.bind(this, e)
-    }
-  ];
+  console.log('render_row:', e);
+  console.log('this.edit_mode:', this.state.edit_mode);
+  if(this.state.edit_mode) {
+    return (
+        <View style={styles.list_element_view}>
+        <Text>edit</Text>
+        <Text style={styles.list_text}>{e.name}</Text>
+        <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
+        <Text> - </Text>
+        <Text style={styles.list_text}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
+        </View>
+    );
+  } else {
+    let swipeout_buttons = [
+      {
+        text: 'Delete',
+        backgroundColor: 'red',
+        onPress: this.delete_food.bind(this, e)
+      }
+    ];
 
-  return (
-      <Swipeout
-    right={swipeout_buttons}
-    backgroundColor='white'
-    autoClose={true}
-      >
-      <TouchableOpacity
-    onPress={this.show_food_detail.bind(this, e)}
-      >
-      <View style={styles.list_element_view}>
-      <Text style={styles.list_text}>{e.name}</Text>
-      <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
-      <Text> - </Text>
-      <Text style={styles.list_text}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
-      </View>
-      </TouchableOpacity>
-      </Swipeout>
-  );
+    return (
+        <Swipeout
+      right={swipeout_buttons}
+      backgroundColor='white'
+      autoClose={true}
+        >
+        <TouchableOpacity
+      onPress={this.show_food_detail.bind(this, e)}
+        >
+        <View style={styles.list_element_view}>
+        <Text style={styles.list_text}>{e.name}</Text>
+        <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
+        <Text> - </Text>
+        <Text style={styles.list_text}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
+        </View>
+        </TouchableOpacity>
+        </Swipeout>
+    );
+  }
 }
 
 function create_food() {
@@ -226,6 +250,23 @@ function delete_food(food) {
     .done();
 }
 
+function edit_food() {
+  var food_list = _.cloneDeep(this.state.food_list);
+  food_list = _.map(food_list, function(e) {
+    e.edit_mode = true;
+    //e.name = 'test';
+    //food_list.push(e);
+
+    return e;
+  });
+  console.log('edit_food food_list:', food_list);
+  console.log('compare:', this.state.food_list[0] === food_list[0]);
+  this.setState({
+    edit_mode: true,
+    data_source: this.state.data_source.cloneWithRows(food_list)
+  });
+}
+
 function component_did_mount() {
   this.get_food_list('all');
 }
@@ -241,7 +282,8 @@ var options = {
   show_filter: show_filter,
   get_food_list: get_food_list,
   delete_food: delete_food,
-  show_food_detail: show_food_detail
+  show_food_detail: show_food_detail,
+  edit_food: edit_food
 };
 
 var ShowView = React.createClass(options);
@@ -328,6 +370,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   create_food_text: {
+    //fontSize: 30,
+    //color: 'white',
+    alignSelf: 'center'
+  },
+  edit_food: {
+    position: 'absolute',
+    top: 20,
+    //left: 0,
+    right: 60,
+    //marginTop: 30,
+    height: 30,
+    width: 60,
+    //flex: 1,
+    //flexDirection: 'row',
+    //backgroundColor: '#48BBEC',
+    //borderColor: '#48BBEC',
+    //borderWidth: 1,
+    //borderRadius: 8,
+    //marginBottom: 5,
+    //marginLeft: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  edit_food_text: {
     //fontSize: 30,
     //color: 'white',
     alignSelf: 'center'
