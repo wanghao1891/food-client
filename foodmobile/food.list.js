@@ -21,6 +21,7 @@ var Popover = require('./popover');
 var Screen = Dimensions.get('window');
 var Swipeout = require('react-native-swipeout');
 var _ = require('lodash');
+var CheckBox = require('react-native-checkbox');
 
 var filters = [
   'Cancel',
@@ -108,7 +109,8 @@ function get_initial_state() {
     popover_isvisible: false,
     popover_rect: {},
     edit_mode: false,
-    food_list: []
+    food_list: [],
+    checked: false
   };
 }
 
@@ -181,7 +183,30 @@ function render_row(e) {
   if(this.state.edit_mode) {
     return (
         <View style={styles.list_element_view}>
-        <Text>edit</Text>
+        <CheckBox
+      label=''
+      checked={e.checked}
+      onChange={(checked) => {
+        console.log('I am checked', checked);
+        this.setState({checked: true});
+
+        var food_list = _.map(this.state.food_list, function(food) {
+          if(food._id == e._id) {
+            var _food = _.cloneDeep(food);
+            _food.checked = true;
+            return _food;
+          } else {
+            return food;
+          }
+        });
+
+        this.setState({
+          edit_mode: true,
+          food_list: food_list,
+          data_source: this.state.data_source.cloneWithRows(food_list)
+        });
+      }}
+        />
         <Text style={styles.list_text}>{e.name}</Text>
         <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
         <Text> - </Text>
@@ -252,17 +277,18 @@ function delete_food(food) {
 
 function edit_food() {
   var food_list = _.cloneDeep(this.state.food_list);
-  food_list = _.map(food_list, function(e) {
-    e.edit_mode = true;
-    //e.name = 'test';
-    //food_list.push(e);
-
-    return e;
-  });
+//  food_list = _.map(food_list, function(e) {
+//    e.edit_mode = true;
+//    //e.name = 'test';
+//    //food_list.push(e);
+//
+//    return e;
+//  });
   console.log('edit_food food_list:', food_list);
   console.log('compare:', this.state.food_list[0] === food_list[0]);
   this.setState({
     edit_mode: true,
+    food_list: food_list,
     data_source: this.state.data_source.cloneWithRows(food_list)
   });
 }
