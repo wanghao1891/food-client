@@ -91,9 +91,9 @@ function render() {
       </View>
 
       <View style={styles.list_header}>
-      <Text style={styles.list_text}>Name</Text>
-      <Text style={styles.list_text}>Purchase</Text>
-      <Text style={styles.list_text}>Expiration</Text>
+      <Text style={styles.list_header_text}>Name</Text>
+      <Text style={styles.list_header_text}>Purchase</Text>
+      <Text style={styles.list_header_text}>Expiration</Text>
       </View>
 
       <ListView
@@ -187,6 +187,16 @@ function close_popover() {
 function render_row(e) {
   console.log('render_row:', e);
   console.log('this.edit_mode:', this.state.edit_mode);
+
+  var list_text = (
+      <View style={styles.list_text_view}>
+      <Text style={styles.list_text}>{e.name}</Text>
+      <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
+      <Text> - </Text>
+      <Text style={styles.list_text}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
+      </View>
+  );
+
   if(this.state.edit_mode) {
     return (
         <View style={styles.list_element_view}>
@@ -215,10 +225,7 @@ function render_row(e) {
       }}
         />
 
-        <Text style={styles.list_text}>{e.name}</Text>
-        <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
-        <Text> - </Text>
-        <Text style={styles.list_text}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
+        {list_text}
 
         </View>
     );
@@ -241,10 +248,9 @@ function render_row(e) {
       onPress={this.show_food_detail.bind(this, e)}
         >
         <View style={styles.list_element_view}>
-        <Text style={styles.list_text}>{e.name}</Text>
-        <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
-        <Text> - </Text>
-        <Text style={styles.list_text}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
+
+        {list_text}
+
         </View>
         </TouchableOpacity>
         </Swipeout>
@@ -348,14 +354,27 @@ const styles = StyleSheet.create({
     height: 20,
     borderBottomWidth: 1
   },
+  list_text_view: {
+    //borderWidth: 1,
+    flexDirection: 'row',
+    height: 26,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   list_text: {
     //borderWidth: 1,
-    height: 26,
+    //textAlign: 'auto',
+    //height: 26,
+    width: 80
+  },
+  list_header_text: {
+    //borderWidth: 1,
+    //height: 26,
     width: 80
   },
   list_view: {
-//    flex: 2,
-//    flexDirection: 'row',
+    //flex: 2,
+    //flexDirection: 'row',
     //marginTop: 60,
     //height: 300,
     //paddingBottom: 20,
