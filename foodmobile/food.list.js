@@ -41,19 +41,60 @@ var filters = [
 //      />
 //      </View>
 function render() {
+  var filter_button,
+      edit_button,
+      add_button,
+      cancel_button;
+
+  if(this.state.edit_mode) {
+    filter_button = null;
+    edit_button = null;
+    add_button = null;
+
+    cancel_button = (
+        <TouchableOpacity style={styles.cancel}
+      onPress={this.exit_edit_mode}
+      underlayColor='#99d9f4'>
+        <Text style={styles.cancel_text}>Cancel</Text>
+        </TouchableOpacity>
+    );
+  } else {
+    filter_button = (
+        <TouchableOpacity
+      style={styles.filter_food}
+      ref='button'
+      onPress={this.show_filter}
+      underlayColor='#99d9f4'>
+        <Text style={styles.filter_food_text}>Filter</Text>
+        </TouchableOpacity>
+    );
+
+    edit_button = (
+        <TouchableOpacity style={styles.edit_food}
+      onPress={this.edit_food}
+      underlayColor='#99d9f4'>
+        <Text style={styles.edit_food_text}>Edit</Text>
+        </TouchableOpacity>
+    );
+
+    add_button = (
+        <TouchableOpacity style={styles.create_food}
+      onPress={this.create_food}
+      underlayColor='#99d9f4'>
+        <Text style={styles.create_food_text}>Add</Text>
+        </TouchableOpacity>
+    );
+
+    cancel_button = null;
+  }
+
   return (
       <View style={{flex: 1}}>
 
       <View style={styles.header}>
-      <Text style={{textAlign: 'center', marginTop: 10}}>Welcome! {this.props.username}</Text>
+      <Text style={{textAlign: 'center', marginTop: 10}}>{this.state.title}</Text>
 
-      <TouchableOpacity
-    style={styles.filter_food}
-    ref='button'
-    onPress={this.show_filter}
-    underlayColor='#99d9f4'>
-      <Text style={styles.filter_food_text}>Filter</Text>
-      </TouchableOpacity>
+      {filter_button}
 
       <Popover
     isVisible={this.state.popover_isvisible}
@@ -77,17 +118,11 @@ function render() {
 
       </Popover>
 
-      <TouchableOpacity style={styles.edit_food}
-    onPress={this.edit_food}
-    underlayColor='#99d9f4'>
-      <Text style={styles.edit_food_text}>Edit</Text>
-      </TouchableOpacity>
+      {edit_button}
 
-      <TouchableOpacity style={styles.create_food}
-    onPress={this.create_food}
-    underlayColor='#99d9f4'>
-      <Text style={styles.create_food_text}>Add</Text>
-      </TouchableOpacity>
+    {add_button}
+
+    {cancel_button}
       </View>
 
       <View style={styles.list_header}>
@@ -117,7 +152,7 @@ function get_initial_state() {
     popover_rect: {},
     edit_mode: false,
     food_list: [],
-    checked: false
+    title: 'All'
   };
 }
 
@@ -308,6 +343,18 @@ function edit_food() {
   });
 }
 
+function exit_edit_mode() {
+  var food_list = _.cloneDeep(this.state.food_list);
+
+  console.log('exit_edit_mode food_list:', food_list);
+  console.log('compare:', this.state.food_list[0] === food_list[0]);
+  this.setState({
+    edit_mode: false,
+    food_list: food_list,
+    data_source: this.state.data_source.cloneWithRows(food_list)
+  });
+}
+
 function component_did_mount() {
   this.get_food_list('all');
 }
@@ -324,7 +371,8 @@ var options = {
   get_food_list: get_food_list,
   delete_food: delete_food,
   show_food_detail: show_food_detail,
-  edit_food: edit_food
+  edit_food: edit_food,
+  exit_edit_mode: exit_edit_mode
 };
 
 var ShowView = React.createClass(options);
@@ -450,6 +498,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   edit_food_text: {
+    //fontSize: 30,
+    //color: 'white',
+    alignSelf: 'center'
+  },
+  cancel: {
+    position: 'absolute',
+    top: 20,
+    //left: 0,
+    right: 0,
+    //marginTop: 30,
+    height: 30,
+    width: 60,
+    //flex: 1,
+    //flexDirection: 'row',
+    //backgroundColor: '#48BBEC',
+    //borderColor: '#48BBEC',
+    //borderWidth: 1,
+    //borderRadius: 8,
+    //marginBottom: 5,
+    //marginLeft: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  cancel_text: {
     //fontSize: 30,
     //color: 'white',
     alignSelf: 'center'
