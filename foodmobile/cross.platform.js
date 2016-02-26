@@ -15,9 +15,10 @@ var SignupView = require('./signup');
 var FoodListView = require('./tab.bar');
 var CreateFoodView = require('./create.food');
 var ConfigurationView = require('./configuration');
+var FoodDetailView = require('./food.detail');
 
-var HOST = 'http://192.168.77.160:6006';
-//var HOST = 'http://192.168.1.100:6006';
+var HOST = 'http://192.168.77.161:6006';
+//var HOST = 'http://192.168.1.108:6006';
 
 function render() {
   return (
@@ -64,6 +65,13 @@ function render_scene(route, navigator) {
     return <ConfigurationView
     navigator={navigator}
     host={HOST}
+      />;
+  case 'food_detail':
+    return <FoodDetailView
+    navigator={navigator}
+    food={route.food}
+    host={route.host}
+    sid={route.sid}
       />;
   default:
     return <SigninView

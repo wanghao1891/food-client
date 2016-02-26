@@ -21,7 +21,7 @@ var Popover = require('./popover');
 var Screen = Dimensions.get('window');
 var Swipeout = require('react-native-swipeout');
 var _ = require('lodash');
-var CheckBox = require('react-native-checkbox');
+var CheckBox = require('./checkbox.js');
 
 var filters = [
   'Cancel',
@@ -31,6 +31,15 @@ var filters = [
   'All',
 ];
 
+//      <View style={{height: Screen.height - 120, borderBottomWidth: 1}}>
+//      <ListView
+//    dataSource={this.state.data_source}
+//    renderRow={this.render_row}
+//    style={styles.list_view}
+//    renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+//    renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
+//      />
+//      </View>
 function render() {
   return (
       <View style={{flex: 1}}>
@@ -87,7 +96,6 @@ function render() {
       <Text style={styles.list_text}>Expiration</Text>
       </View>
 
-      <View style={{height: Screen.height - 120, borderBottomWidth: 1}}>
       <ListView
     dataSource={this.state.data_source}
     renderRow={this.render_row}
@@ -95,7 +103,6 @@ function render() {
     renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
     renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
       />
-      </View>
       </View>
   );
 }
@@ -207,10 +214,12 @@ function render_row(e) {
         });
       }}
         />
+
         <Text style={styles.list_text}>{e.name}</Text>
         <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
         <Text> - </Text>
         <Text style={styles.list_text}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
+
         </View>
     );
   } else {
@@ -341,7 +350,7 @@ const styles = StyleSheet.create({
   },
   list_text: {
     //borderWidth: 1,
-    //height: 50,
+    height: 26,
     width: 80
   },
   list_view: {
@@ -355,12 +364,14 @@ const styles = StyleSheet.create({
     //backgroundColor: '#F5FCFF'
   },
   list_element_view: {
-    flex: 1,
+    //flex: 1,
     flexDirection: 'row',
-    //justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'center',
+    //alignItems: 'center',
     //backgroundColor: '#F5FCFF',
-    marginTop: 20
+    //marginTop: 20,
+    //borderWidth: 1,
+    padding: 10
   },
   filter_food: {
     position: 'absolute',
