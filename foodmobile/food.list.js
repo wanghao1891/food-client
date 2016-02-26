@@ -71,10 +71,10 @@ function render() {
 
     edit_operation_view = (
         <View style={styles.edit_operation_view}>
-        <TouchableOpacity style={styles.delete}
-      onPress={this.exit_edit_mode}
+        <TouchableOpacity style={styles.delete_all}
+      onPress={this.delete_all}
       underlayColor='#99d9f4'>
-        <Text style={styles.cancel_text}>Delete All</Text>
+        <Text style={styles.delete_all_text}>Delete All</Text>
         </TouchableOpacity>
         </View>
     );
@@ -409,6 +409,24 @@ function toggle_select_all() {
   });
 }
 
+function delete_all() {
+  var delete_object_list = _.filter(this.state.food_list, function(e) {
+    return e.checked;
+  });
+
+  console.log('delete_all delete_object_list:', delete_object_list);
+
+  var delete_id_list = _.reduce(delete_object_list, function(result, e) {
+    console.log('result:', result);
+    result.push(e._id);
+    return result;
+  }, []);
+
+  console.log('delete_all delete_id_list:', delete_id_list);
+
+
+}
+
 function component_did_mount() {
   this.get_food_list('all');
 }
@@ -427,7 +445,8 @@ var options = {
   show_food_detail: show_food_detail,
   edit_food: edit_food,
   exit_edit_mode: exit_edit_mode,
-  toggle_select_all: toggle_select_all
+  toggle_select_all: toggle_select_all,
+  delete_all: delete_all
 };
 
 var ShowView = React.createClass(options);
@@ -605,6 +624,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderTopWidth: 1,
     height: 25
+  },
+  delete_all: {
+
+  },
+  delete_all_text: {
+    alignSelf: 'center'
   },
   separator: {
     height: 1,
