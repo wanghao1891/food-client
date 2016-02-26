@@ -424,7 +424,35 @@ function delete_all() {
 
   console.log('delete_all delete_id_list:', delete_id_list);
 
+  var url = this.props.host + '/api/food';
+  console.log('delete_all url:', url);
+  fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      sid: this.props.sid
+    },
+    body: JSON.stringify({food_id_list: delete_id_list})
+  })
+    .then((response) => response.json())
+    .then((response_data) => {
+      console.log(response_data);
 
+      //this.get_food_list('all');
+
+      var food_list = _.filter(this.state.food_list, function(e) {
+        return (delete_id_list.indexOf(e._id) == -1);
+      });
+      this.setState({
+        food_list: food_list,
+        data_source: this.state.data_source.cloneWithRows(food_list)
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .done();
 }
 
 function component_did_mount() {
