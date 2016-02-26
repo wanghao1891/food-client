@@ -44,12 +44,22 @@ function render() {
   var filter_button,
       edit_button,
       add_button,
-      cancel_button;
+      cancel_button,
+      edit_operation_view,
+      select_all_button;
 
   if(this.state.edit_mode) {
     filter_button = null;
     edit_button = null;
     add_button = null;
+
+    select_all_button = (
+        <TouchableOpacity style={styles.select_all}
+      onPress={this.toggle_select_all}
+      underlayColor='#99d9f4'>
+        <Text style={styles.select_all_text}>{this.state.select_all_name}</Text>
+        </TouchableOpacity>
+    );
 
     cancel_button = (
         <TouchableOpacity style={styles.cancel}
@@ -57,6 +67,16 @@ function render() {
       underlayColor='#99d9f4'>
         <Text style={styles.cancel_text}>Cancel</Text>
         </TouchableOpacity>
+    );
+
+    edit_operation_view = (
+        <View style={styles.edit_operation_view}>
+        <TouchableOpacity style={styles.delete}
+      onPress={this.exit_edit_mode}
+      underlayColor='#99d9f4'>
+        <Text style={styles.cancel_text}>Delete All</Text>
+        </TouchableOpacity>
+        </View>
     );
   } else {
     filter_button = (
@@ -85,7 +105,11 @@ function render() {
         </TouchableOpacity>
     );
 
+    select_all_button = null;
+
     cancel_button = null;
+
+    edit_operation_view = null;
   }
 
   return (
@@ -95,6 +119,7 @@ function render() {
       <Text style={{textAlign: 'center', marginTop: 10}}>{this.state.title}</Text>
 
       {filter_button}
+    {select_all_button}
 
       <Popover
     isVisible={this.state.popover_isvisible}
@@ -138,6 +163,8 @@ function render() {
     renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
     renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
       />
+
+      {edit_operation_view}
       </View>
   );
 }
@@ -152,7 +179,8 @@ function get_initial_state() {
     popover_rect: {},
     edit_mode: false,
     food_list: [],
-    title: 'All'
+    title: 'All',
+    select_all_name: 'Select All'
   };
 }
 
@@ -355,6 +383,19 @@ function exit_edit_mode() {
   });
 }
 
+function toggle_select_all() {
+  var name;
+  if(this.state.select_all_name === 'Select All') {
+    name = 'Unselect All';
+  } else {
+    name = 'Select All';
+  }
+
+  this.setState({
+    select_all_name: name
+  });
+}
+
 function component_did_mount() {
   this.get_food_list('all');
 }
@@ -372,7 +413,8 @@ var options = {
   delete_food: delete_food,
   show_food_detail: show_food_detail,
   edit_food: edit_food,
-  exit_edit_mode: exit_edit_mode
+  exit_edit_mode: exit_edit_mode,
+  toggle_select_all: toggle_select_all
 };
 
 var ShowView = React.createClass(options);
@@ -454,6 +496,20 @@ const styles = StyleSheet.create({
     //color: 'white',
     alignSelf: 'center'
   },
+  select_all: {
+    position: 'absolute',
+    top: 20,
+    left: 0,
+    height: 30,
+    width: 80,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  select_all_text: {
+    //fontSize: 20,
+    //color: 'white',
+    alignSelf: 'center'
+  },
   create_food: {
     position: 'absolute',
     top: 20,
@@ -525,6 +581,17 @@ const styles = StyleSheet.create({
     //fontSize: 30,
     //color: 'white',
     alignSelf: 'center'
+  },
+  edit_operation_view: {
+    position: 'absolute',
+    bottom: 49,
+    left: 0,
+    right: 0,
+    //borderWidth: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    borderTopWidth: 1,
+    height: 25
   },
   separator: {
     height: 1,
