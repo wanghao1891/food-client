@@ -384,14 +384,27 @@ function exit_edit_mode() {
 }
 
 function toggle_select_all() {
-  var name;
+  var name,
+      checked;
   if(this.state.select_all_name === 'Select All') {
     name = 'Unselect All';
+    checked = true;
   } else {
     name = 'Select All';
+    checked = false;
   }
 
+  var food_list = _.cloneDeep(this.state.food_list);
+  food_list = _.map(food_list, function(e) {
+    e.checked = checked;
+
+    return e;
+  });
+  console.log('toggle_select_all food_list:', food_list);
+  console.log('toggle_select_all compare:', this.state.food_list[0] === food_list[0]);
   this.setState({
+    food_list: food_list,
+    data_source: this.state.data_source.cloneWithRows(food_list),
     select_all_name: name
   });
 }
