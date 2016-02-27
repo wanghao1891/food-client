@@ -23,15 +23,13 @@ function render() {
       Record the detail of food
     </Text>
 
-      <View style={{borderBottomWidth: 1, alignItems: 'center', alignSelf: 'stretch'}}>
+      <View style={styles.flowRight}>
       <TextInput
     style={styles.signInput}
     onChangeText={(username) => this.setState({username})}
     value={this.state.username}
     placeholder='Name'/>
-      </View>
 
-      <View style={{borderBottomWidth: 1, alignItems: 'center', alignSelf: 'stretch'}}>
       <TextInput
     style={styles.signInput}
     onChange={this.on_password_change}
@@ -155,32 +153,33 @@ const styles = StyleSheet.create({
     //borderColor: '#48BBEC',
     //borderRadius: 8,
     //color: '#48BBEC',
-    //borderWidth: 1,
+    borderWidth: 1,
     //borderBottomWidth: 1,
     //borderLeftWidth: 1,
     //borderRightWidth: 1,
     justifyContent: 'center',
     textAlign: 'center',
     height: 36,
-    //padding: 4,
+    padding: 4,
     marginBottom: 5,
     flex: 4,
     fontSize: 15
   },
   button: {
-    height: 30,
-    width: 60,
-    //flex: 1,
-    //flexDirection: 'row',
+    height: 36,
+    //width: 60,
+    flex: 1,
+    flexDirection: 'row',
     //backgroundColor: '#48BBEC',
     //borderColor: '#48BBEC',
     //borderBottomWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
+    //borderLeftWidth: 1,
+    //borderRightWidth: 1,
     //borderRadius: 8,
-    //marginBottom: 5,
-    marginTop: 20,
-    alignSelf: 'center',
+    marginBottom: 5,
+    borderWidth: 1,
+    //marginTop: 20,
+    alignSelf: 'stretch',
     justifyContent: 'center'
   },
   buttonText: {
