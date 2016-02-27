@@ -9,7 +9,8 @@
     "react-native": "0.20.0-rc1",
     "react-native-calendar-picker": "^1.0.1",
     "react-native-tab-navigator": "^0.2.16",
-    "react-native-swipeout": "^2.0.12",
-    "react-native-checkbox": "^1.0.8"
+    "react-native-swipeout": "https://github.com/wanghao1891/react-native-swipeout.git",
+    "react-native-checkbox": "https://github.com/wanghao1891/react-native-checkbox.git",
+    "react-native-popover": "https://github.com/wanghao1891/react-native-popover.git"
   }
 }

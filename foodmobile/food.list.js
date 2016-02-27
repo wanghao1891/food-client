@@ -17,11 +17,11 @@ import React, {
 } from 'react-native';
 
 var moment = require('moment');
-var Popover = require('./popover');
+var Popover = require('react-native-popover');
 var Screen = Dimensions.get('window');
 var Swipeout = require('react-native-swipeout');
 var _ = require('lodash');
-var CheckBox = require('./checkbox.js');
+var CheckBox = require('react-native-checkbox');
 
 var filters = [
   'Cancel',
@@ -268,12 +268,11 @@ function render_row(e) {
       checked={e.checked}
       onChange={(checked) => {
         console.log('I am checked', checked);
-        this.setState({checked: true});
 
         var food_list = _.map(this.state.food_list, function(food) {
           if(food._id == e._id) {
             var _food = _.cloneDeep(food);
-            _food.checked = true;
+            _food.checked = _food.checked ? false : true;
             return _food;
           } else {
             return food;
@@ -303,8 +302,7 @@ function render_row(e) {
 
     return (
         <Swipeout
-      right={swipeout_buttons}
-      backgroundColor='white'
+      right={swipeout_buttons}x
       autoClose={true}
         >
         <TouchableOpacity
@@ -511,14 +509,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   list_text_view: {
-    //borderWidth: 1,
+    borderWidth: 1,
     flexDirection: 'row',
     height: 26,
     justifyContent: 'center',
     alignItems: 'center'
   },
   list_text: {
-    //borderWidth: 1,
+    borderWidth: 1,
     //textAlign: 'auto',
     //height: 26,
     width: 80
