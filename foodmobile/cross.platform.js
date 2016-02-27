@@ -33,31 +33,42 @@ function get_initial_state() {
 
 function component_did_mount() {
   //console.log('component_did_mount start');
-  var user;
+
   AsyncStorage.getItem(config.async_storage_key.user)
     .then((value) => {
-      user = JSON.parse(value);
-      //console.log('Saved user: ', user);
+      var user = JSON.parse(value);
+      console.log('Saved user: ', user);
 
-      var initial_route;
-      if(user) {
-        initial_route = {
-          id: 'food_list',
-          sid: user.sid,
-          host: HOST
-        };
-      } else {
-        initial_route = {
-          id: 'signin'
-        };
-      }
+      AsyncStorage.getItem(config.async_storage_key.host)
+        .then((value) => {
+          console.log('Saveed host:', value);
 
-      this.setState({
-        initial_route: initial_route,
-        loaded: true
-      });
+          var initial_route;
+          if(user) {
+            initial_route = {
+              id: 'food_list',
+              sid: user.sid,
+              host: value
+            };
+          } else {
+            initial_route = {
+              id: 'signin',
+              host: value
+            };
+          }
+          this.setState({
+            initial_route: initial_route,
+            loaded: true
+          });
+        })
+        .catch((err) => {
+          console.log('AsyncStorage error:', err.message);
+        })
+        .done();
     })
-    .catch((err) => console.log('AsyncStorage error:', err.message))
+    .catch((err) => {
+      console.log('AsyncStorage error:', err.message);
+    })
     .done();
 
   //console.log('component_did_mount end');

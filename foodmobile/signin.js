@@ -92,9 +92,11 @@ function show_setting_view() {
 function signin() {
   //console.log('username:', this.state.username);
   //console.log('password:', this.state.password);
-  //console.log('host:', this.props.host);
 
-  fetch(this.props.host + '/api/auth/signin', {
+  var url = this.props.host + '/api/auth/signin';
+  console.log('signin url:', url);
+
+  fetch(url, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
