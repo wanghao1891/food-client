@@ -6,7 +6,10 @@
 'use strict';
 import React, {
   Component,
-  Navigator
+  Navigator,
+  AsyncStorage,
+  View,
+  Text
 } from 'react-native';
 
 var SigninView = require('./signin');
@@ -16,26 +19,76 @@ var FoodListView = require('./tab.bar');
 var CreateFoodView = require('./create.food');
 var ConfigurationView = require('./configuration');
 var FoodDetailView = require('./food.detail');
+var config = require('./config');
 
 var HOST = 'http://192.168.77.161:6006';
 //var HOST = 'http://192.168.1.108:6006';
 
-function render() {
-  return (
-      <Navigator
-    initialRoute={{ message: 'First Scene' }}
-    renderScene={this.render_scene}
-    configureScene={(route) => {
-      if (route.sceneConfig) {
-        return route.sceneConfig;
+function get_initial_state() {
+  return {
+    initial_route: {},
+    loaded: false
+  };
+}
+
+function component_did_mount() {
+  console.log('component_did_mount start');
+  var user;
+  AsyncStorage.getItem(config.async_storage_key.user)
+    .then((value) => {
+      user = JSON.parse(value);
+      console.log('Saved user: ', user);
+
+      var initial_route;
+      if(user) {
+        initial_route = {
+          id: 'food_list',
+          sid: user.sid,
+          host: HOST
+        };
+      } else {
+        initial_route = {
+          id: 'signin'
+        };
       }
-      return Navigator.SceneConfigs.FloatFromBottom;
-    }}
-    />
-  );
+
+      this.setState({
+        initial_route: initial_route,
+        loaded: true
+      });
+    })
+    .catch((err) => console.log('AsyncStorage error:', err.message))
+    .done();
+
+    console.log('component_did_mount end');
+}
+
+function render() {
+  console.log('render initial_route:', this.state.initial_route);
+  if(this.state.loaded) {
+    return (
+        <Navigator
+      initialRoute={this.state.initial_route}
+      renderScene={this.render_scene}
+      configureScene={(route) => {
+        if (route.sceneConfig) {
+          return route.sceneConfig;
+        }
+        return Navigator.SceneConfigs.FloatFromRight;
+      }}
+        />
+    );
+  } else {
+    return (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>Loading, please wait for a moment...</Text>
+        </View>
+    );
+  }
 }
 
 function render_scene(route, navigator) {
+  console.log('render_scene route:', route);
   switch(route.id) {
   case 'signin':
     return <SigninView
@@ -83,7 +136,9 @@ function render_scene(route, navigator) {
 
 var options = {
   render: render,
-  render_scene: render_scene
+  render_scene: render_scene,
+  getInitialState: get_initial_state,
+  componentDidMount: component_did_mount
 };
 
 var foodmobile = React.createClass(options);

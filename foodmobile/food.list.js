@@ -509,14 +509,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   list_text_view: {
-    borderWidth: 1,
+    //borderWidth: 1,
     flexDirection: 'row',
     height: 26,
     justifyContent: 'center',
     alignItems: 'center'
   },
   list_text: {
-    borderWidth: 1,
+    //borderWidth: 1,
     //textAlign: 'auto',
     //height: 26,
     width: 80
