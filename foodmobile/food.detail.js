@@ -199,7 +199,7 @@ function render() {
 }
 
 function get_initial_state() {
-  console.log('expiration_date:', this.props.food.expiration_date);
+  //console.log('expiration_date:', this.props.food.expiration_date);
 
   return {
     foodname: this.props.food.name,
@@ -271,9 +271,9 @@ function on_foodname_blur() {
 function update_food() {
   var url = this.props.host + '/api/food/' + this.props.food._id;
 
-  console.log('foodname:', this.state.foodname);
-  console.log('expired:', this.state.date);
-  console.log('update_food url:', url);
+  //console.log('foodname:', this.state.foodname);
+  //console.log('expired:', this.state.date);
+  //console.log('update_food url:', url);
 
   fetch(url, {
     method: 'PUT',
@@ -300,8 +300,8 @@ function update_food() {
       } else {
         this.setState({error: 'Save failed!'});
       }
-      console.log(this.state.username);
-      console.log(response_data);
+      //console.log(this.state.username);
+      //console.log(response_data);
     })
     .done();
 }

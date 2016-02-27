@@ -89,9 +89,9 @@ function show_configuration_view() {
 }
 
 function signin() {
-  console.log('username:', this.state.username);
-  console.log('password:', this.state.password);
-  console.log('host:', this.props.host);
+  //console.log('username:', this.state.username);
+  //console.log('password:', this.state.password);
+  //console.log('host:', this.props.host);
 
   fetch(this.props.host + '/api/auth/signin', {
     method: 'POST',
@@ -106,8 +106,8 @@ function signin() {
   })
     .then((response) => response.json())
     .then((response_data) => {
-      console.log(this.state.username);
-      console.log(response_data);
+      //console.log(this.state.username);
+      //console.log(response_data);
 
       var sid = response_data.sid;
 

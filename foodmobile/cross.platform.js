@@ -32,12 +32,12 @@ function get_initial_state() {
 }
 
 function component_did_mount() {
-  console.log('component_did_mount start');
+  //console.log('component_did_mount start');
   var user;
   AsyncStorage.getItem(config.async_storage_key.user)
     .then((value) => {
       user = JSON.parse(value);
-      console.log('Saved user: ', user);
+      //console.log('Saved user: ', user);
 
       var initial_route;
       if(user) {
@@ -60,11 +60,11 @@ function component_did_mount() {
     .catch((err) => console.log('AsyncStorage error:', err.message))
     .done();
 
-    console.log('component_did_mount end');
+  //console.log('component_did_mount end');
 }
 
 function render() {
-  console.log('render initial_route:', this.state.initial_route);
+  //console.log('render initial_route:', this.state.initial_route);
   if(this.state.loaded) {
     return (
         <Navigator
@@ -88,7 +88,7 @@ function render() {
 }
 
 function render_scene(route, navigator) {
-  console.log('render_scene route:', route);
+  //console.log('render_scene route:', route);
   switch(route.id) {
   case 'signin':
     return <SigninView

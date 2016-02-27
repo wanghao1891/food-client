@@ -199,7 +199,7 @@ function get_food_list(type) {
   }
 
   var url = this.props.host + '/api/food/' + type;
-  console.log('get_food_list url:', url);
+  //console.log('get_food_list url:', url);
   fetch(url, {
     method: 'GET',
     headers: {
@@ -210,7 +210,7 @@ function get_food_list(type) {
   })
     .then((response) => response.json())
     .then((response_data) => {
-      console.log(response_data);
+      //console.log(response_data);
 
       this.setState({
         data_source: this.state.data_source.cloneWithRows(response_data.data),
@@ -248,8 +248,8 @@ function close_popover() {
 }
 
 function render_row(e) {
-  console.log('render_row:', e);
-  console.log('this.edit_mode:', this.state.edit_mode);
+  //console.log('render_row:', e);
+  //console.log('this.edit_mode:', this.state.edit_mode);
 
   var list_text = (
       <View style={styles.list_text_view}>
@@ -267,7 +267,7 @@ function render_row(e) {
       label=''
       checked={e.checked}
       onChange={(checked) => {
-        console.log('I am checked', checked);
+        //console.log('I am checked', checked);
 
         var food_list = _.map(this.state.food_list, function(food) {
           if(food._id == e._id) {
@@ -330,7 +330,7 @@ function create_food() {
 
 function delete_food(food) {
   var url = this.props.host + '/api/food/' + food._id;
-  console.log('delete_food url:', url);
+  //console.log('delete_food url:', url);
   fetch(url, {
     method: 'DELETE',
     headers: {
@@ -341,7 +341,7 @@ function delete_food(food) {
   })
     .then((response) => response.json())
     .then((response_data) => {
-      console.log(response_data);
+      //console.log(response_data);
 
       var food_list = _.filter(this.state.food_list, function(e) {
         return (e._id !== food._id);
@@ -366,8 +366,8 @@ function edit_food() {
 //
 //    return e;
 //  });
-  console.log('edit_food food_list:', food_list);
-  console.log('compare:', this.state.food_list[0] === food_list[0]);
+  //console.log('edit_food food_list:', food_list);
+  //console.log('compare:', this.state.food_list[0] === food_list[0]);
   this.setState({
     edit_mode: true,
     food_list: food_list,
@@ -378,8 +378,8 @@ function edit_food() {
 function exit_edit_mode() {
   var food_list = _.cloneDeep(this.state.food_list);
 
-  console.log('exit_edit_mode food_list:', food_list);
-  console.log('compare:', this.state.food_list[0] === food_list[0]);
+  //console.log('exit_edit_mode food_list:', food_list);
+  //console.log('compare:', this.state.food_list[0] === food_list[0]);
   this.setState({
     edit_mode: false,
     food_list: food_list,
@@ -404,8 +404,8 @@ function toggle_select_all() {
 
     return e;
   });
-  console.log('toggle_select_all food_list:', food_list);
-  console.log('toggle_select_all compare:', this.state.food_list[0] === food_list[0]);
+  //console.log('toggle_select_all food_list:', food_list);
+  //console.log('toggle_select_all compare:', this.state.food_list[0] === food_list[0]);
   this.setState({
     food_list: food_list,
     data_source: this.state.data_source.cloneWithRows(food_list),
@@ -418,18 +418,18 @@ function delete_all() {
     return e.checked;
   });
 
-  console.log('delete_all delete_object_list:', delete_object_list);
+  //console.log('delete_all delete_object_list:', delete_object_list);
 
   var delete_id_list = _.reduce(delete_object_list, function(result, e) {
-    console.log('result:', result);
+    //console.log('result:', result);
     result.push(e._id);
     return result;
   }, []);
 
-  console.log('delete_all delete_id_list:', delete_id_list);
+  //console.log('delete_all delete_id_list:', delete_id_list);
 
   var url = this.props.host + '/api/food';
-  console.log('delete_all url:', url);
+  //console.log('delete_all url:', url);
   fetch(url, {
     method: 'DELETE',
     headers: {
@@ -441,7 +441,7 @@ function delete_all() {
   })
     .then((response) => response.json())
     .then((response_data) => {
-      console.log(response_data);
+      //console.log(response_data);
 
       //this.get_food_list('all');
 

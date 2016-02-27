@@ -262,8 +262,8 @@ function on_foodname_blur() {
 }
 
 function create_food() {
-  console.log('foodname:', this.state.foodname);
-  console.log('expired:', this.state.date);
+  //console.log('foodname:', this.state.foodname);
+  //console.log('expired:', this.state.date);
 
   fetch(this.props.host + '/api/food', {
     method: 'POST',
@@ -286,8 +286,8 @@ function create_food() {
         username: this.props.username,
         host: this.props.host
       });
-      console.log(this.state.username);
-      console.log(response_data);
+      //console.log(this.state.username);
+      //console.log(response_data);
     })
     .done();
 }

@@ -61,8 +61,8 @@ function on_password_change(event) {
 
 function signup() {
   //this.setState({username: '456'});
-  console.log('username:', this.state.username);
-  console.log('password:', this.state.password);
+  //console.log('username:', this.state.username);
+  //console.log('password:', this.state.password);
 
   fetch(this.props.host + '/api/auth/signup', {
     method: 'POST',
@@ -83,7 +83,7 @@ function signup() {
         username: this.state.username,
         host: this.props.host
       });
-      console.log(response_data);
+      //console.log(response_data);
     })
     .done();
 }
