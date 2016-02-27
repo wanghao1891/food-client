@@ -12,6 +12,7 @@ import React, {
 } from 'react-native';
 
 var All = require('./food.list');
+var Setting = require('./setting');
 
 function render() {
   return (
@@ -37,7 +38,7 @@ function render() {
       </TabBarIOS.Item>
 
       <TabBarIOS.Item
-    title='Me'
+    title='Setting'
     icon={require('./flux.png')}
     selected={this.state.selected_tab === 'experied'}
     onPress={() => {
@@ -46,9 +47,12 @@ function render() {
       });
     }}
       >
-      <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-      <Text>Coming soon!</Text>
-      </View>
+      <Setting
+    navigator={this.props.navigator}
+    host={this.props.host}
+    sid={this.props.sid}
+    username={this.props.username}
+      />
       </TabBarIOS.Item>
       </TabBarIOS>
   );

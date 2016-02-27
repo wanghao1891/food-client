@@ -37,7 +37,7 @@ function render() {
         </View>
         <TouchableHighlight style={styles.button}
                             onPress={this.signup}
-                            underlayColor='#99d9f4'>
+                            underlayColor='white'>
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableHighlight>
       </View>

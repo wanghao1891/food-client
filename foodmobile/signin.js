@@ -43,17 +43,18 @@ function render() {
 
       <TouchableHighlight style={styles.button}
     onPress={this.signin}
-    underlayColor='#99d9f4'>
+    underlayColor='white'>
       <Text style={styles.buttonText}>Sign in</Text>
       </TouchableHighlight>
+
       <TouchableHighlight style={styles.button}
     onPress={this.show_singup_view}
-    underlayColor='#99d9f4'>
+    underlayColor='white'>
       <Text style={styles.buttonText}>Sign up</Text>
       </TouchableHighlight>
       <TouchableHighlight style={styles.button}
-    onPress={this.show_configuration_view}
-    underlayColor='#99d9f4'>
+    onPress={this.show_setting_view}
+    underlayColor='white'>
       <Text style={styles.buttonText}>Setting</Text>
       </TouchableHighlight>
       </View>
@@ -82,9 +83,9 @@ function show_singup_view() {
   });
 }
 
-function show_configuration_view() {
+function show_setting_view() {
   this.props.navigator.push({
-    id: 'configuration'
+    id: 'setting'
   });
 }
 
@@ -140,7 +141,7 @@ var options = {
   getInitialState: get_initial_state,
   on_username_change: on_username_change,
   on_password_change: on_password_change,
-  show_configuration_view: show_configuration_view
+  show_setting_view: show_setting_view
 };
 
 var SigninView = React.createClass(options);
