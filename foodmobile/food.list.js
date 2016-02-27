@@ -345,7 +345,13 @@ function delete_food(food) {
     .then((response_data) => {
       console.log(response_data);
 
-      this.get_food_list('all');
+      var food_list = _.filter(this.state.food_list, function(e) {
+        return (e._id !== food._id);
+      });
+      this.setState({
+        food_list: food_list,
+        data_source: this.state.data_source.cloneWithRows(food_list)
+      });
     })
     .catch((err) => {
       console.log(err);
