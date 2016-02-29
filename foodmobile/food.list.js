@@ -189,6 +189,8 @@ function show_filter() {
     options: filters,
     cancelButtonIndex: 0
   }, (button_index) => {
+    this.setState({title: filters[button_index]});
+
     this.get_food_list(filters[button_index].toLowerCase());
   });
 }
