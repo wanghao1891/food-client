@@ -13,6 +13,7 @@ import React, {
 } from 'react-native';
 
 var All = require('./food.list');
+var Setting = require('./setting');
 
 import TabNavigator from 'react-native-tab-navigator';
 
@@ -23,7 +24,6 @@ function render() {
     selected={this.state.selected_tab === 'all'}
     title='Food'
     renderIcon={() => <Image source={require('./flux.png')} />}
-    badgeText='1'
     onPress={() => this.setState({ selected_tab: 'all' })}>
       <All
     navigator={this.props.navigator}
@@ -33,13 +33,16 @@ function render() {
       />
       </TabNavigator.Item>
       <TabNavigator.Item
-    selected={this.state.selected_tab === 'me'}
-    title='Me'
+    selected={this.state.selected_tab === 'setting'}
+    title='Setting'
     renderIcon={() => <Image source={require('./flux.png')} />}
-    onPress={() => this.setState({ selected_tab: 'me' })}>
-      <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-      <Text>Coming soon!</Text>
-      </View>
+    onPress={() => this.setState({ selected_tab: 'setting' })}>
+     <Setting
+    navigator={this.props.navigator}
+    host={this.props.host}
+    sid={this.props.sid}
+    username={this.props.username}
+      />
       </TabNavigator.Item>
       </TabNavigator>
   );

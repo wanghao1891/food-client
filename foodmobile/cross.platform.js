@@ -48,12 +48,12 @@ function component_did_mount() {
             initial_route = {
               id: 'food_list',
               sid: user.sid,
-              host: value
+              host: value || HOST
             };
           } else {
             initial_route = {
               id: 'signin',
-              host: value
+              host: value || HOST
             };
           }
           this.setState({

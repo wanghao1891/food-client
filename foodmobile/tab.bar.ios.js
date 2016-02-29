@@ -8,53 +8,87 @@ import React, {
   StyleSheet,
   TabBarIOS,
   Text,
-  View
+  View,
+  Image
 } from 'react-native';
 
 var All = require('./food.list');
 var Setting = require('./setting');
 
+import TabNavigator from 'react-native-tab-navigator';
+
+//function render() {
+//  return (
+//      <TabBarIOS
+//    barTintColor='white'
+//      >
+//      <TabBarIOS.Item
+//    title='Food'
+//    icon={require('./flux.png')}
+//    selected={this.state.selected_tab === 'all'}
+//    onPress={() => {
+//      this.setState({
+//        selected_tab: 'all'
+//      });
+//    }}
+//      >
+//      <All
+//    navigator={this.props.navigator}
+//    host={this.props.host}
+//    sid={this.props.sid}
+//    username={this.props.username}
+//      />
+//      </TabBarIOS.Item>
+//
+//      <TabBarIOS.Item
+//    title='Setting'
+//    icon={require('./flux.png')}
+//    selected={this.state.selected_tab === 'experied'}
+//    onPress={() => {
+//      this.setState({
+//        selected_tab: 'experied'
+//      });
+//    }}
+//      >
+//      <Setting
+//    navigator={this.props.navigator}
+//    host={this.props.host}
+//    sid={this.props.sid}
+//    username={this.props.username}
+//      />
+//      </TabBarIOS.Item>
+//      </TabBarIOS>
+//  );
+//}
+
 function render() {
   return (
-      <TabBarIOS
-    barTintColor='white'
-      >
-      <TabBarIOS.Item
-    title='Food'
-    icon={require('./flux.png')}
+      <TabNavigator>
+      <TabNavigator.Item
     selected={this.state.selected_tab === 'all'}
-    onPress={() => {
-      this.setState({
-        selected_tab: 'all'
-      });
-    }}
-      >
+    title='Food'
+    renderIcon={() => <Image source={require('./flux.png')} />}
+    onPress={() => this.setState({ selected_tab: 'all' })}>
       <All
     navigator={this.props.navigator}
     host={this.props.host}
     sid={this.props.sid}
     username={this.props.username}
       />
-      </TabBarIOS.Item>
-
-      <TabBarIOS.Item
+      </TabNavigator.Item>
+      <TabNavigator.Item
+    selected={this.state.selected_tab === 'setting'}
     title='Setting'
-    icon={require('./flux.png')}
-    selected={this.state.selected_tab === 'experied'}
-    onPress={() => {
-      this.setState({
-        selected_tab: 'experied'
-      });
-    }}
-      >
-      <Setting
+    renderIcon={() => <Image source={require('./flux.png')} />}
+    onPress={() => this.setState({ selected_tab: 'setting' })}>
+     <Setting
     navigator={this.props.navigator}
     host={this.props.host}
     sid={this.props.sid}
     username={this.props.username}
       />
-      </TabBarIOS.Item>
-      </TabBarIOS>
+      </TabNavigator.Item>
+      </TabNavigator>
   );
 }
 

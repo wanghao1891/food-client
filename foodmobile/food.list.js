@@ -22,6 +22,7 @@ var Screen = Dimensions.get('window');
 var Swipeout = require('react-native-swipeout');
 var _ = require('lodash');
 var CheckBox = require('react-native-checkbox');
+var ActionSheet = require('@remobile/react-native-action-sheet');
 
 var filters = [
   'Cancel',
@@ -165,6 +166,24 @@ function render() {
       />
 
       {edit_operation_view}
+
+      <ActionSheet
+    visible={this.state.show_filter_action_sheet}
+    onCancel={() => this.setState({show_filter_action_sheet: false})} >
+      <ActionSheet.Button
+    onPress={() => this.process_filter('Expired')}
+      >Expired</ActionSheet.Button>
+      <ActionSheet.Button
+    onPress={() => this.process_filter('Expiring')}
+      >Expiring</ActionSheet.Button>
+      <ActionSheet.Button
+    onPress={() => this.process_filter('Normal')}
+      >Normal</ActionSheet.Button>
+      <ActionSheet.Button
+    onPress={() => this.process_filter('All')}
+      >All</ActionSheet.Button>
+      </ActionSheet>
+
       </View>
   );
 }
@@ -180,19 +199,30 @@ function get_initial_state() {
     edit_mode: false,
     food_list: [],
     title: 'All',
-    select_all_name: 'Select All'
+    select_all_name: 'Select All',
+    show_filter_action_sheet: false
   };
 }
 
+function process_filter(name) {
+  this.get_food_list(name.toLowerCase());
+  this.setState({
+    show_filter_action_sheet: false,
+    title: name
+  });
+}
+
 function show_filter() {
-  ActionSheetIOS.showActionSheetWithOptions({
+  this.setState({show_filter_action_sheet: true});
+
+  /*ActionSheetIOS.showActionSheetWithOptions({
     options: filters,
     cancelButtonIndex: 0
   }, (button_index) => {
     this.setState({title: filters[button_index]});
 
     this.get_food_list(filters[button_index].toLowerCase());
-  });
+  });*/
 }
 
 function get_food_list(type) {
@@ -480,7 +510,8 @@ var options = {
   edit_food: edit_food,
   exit_edit_mode: exit_edit_mode,
   toggle_select_all: toggle_select_all,
-  delete_all: delete_all
+  delete_all: delete_all,
+  process_filter: process_filter
 };
 
 var ShowView = React.createClass(options);
