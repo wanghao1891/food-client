@@ -680,10 +680,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   edit_operation_view: {
-    position: 'absolute',
-    bottom: 49,
-    left: 0,
-    right: 0,
+    //position: 'absolute',
+    //bottom: 49,
+    //left: 0,
+    //right: 0,
     //borderWidth: 1,
     backgroundColor: 'white',
     justifyContent: 'center',
