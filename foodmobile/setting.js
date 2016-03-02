@@ -58,7 +58,7 @@ function render() {
 
 function get_initial_state() {
   return {
-    host: '192.168.77.161:6006'
+    host: 'pourquoi.wang:6006'
   };
 }
 

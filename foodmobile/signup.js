@@ -10,8 +10,11 @@ import React, {
   Text,
   View,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  AsyncStorage
 } from 'react-native';
+
+var config = require('./config');
 
 function render() {
   return (
@@ -77,13 +80,26 @@ function signup() {
   })
     .then((response) => response.json())
     .then((response_data) => {
+      var sid = response_data.sid;
+
       this.props.navigator.push({
         id: 'food_list',
-        sid: response_data.sid,
+        sid: sid,
         username: this.state.username,
         host: this.props.host
       });
-      //console.log(response_data);
+
+      var user = {
+        name: this.state.username,
+        sid: response_data.sid
+      };
+      AsyncStorage.setItem(config.async_storage_key.user, JSON.stringify(user))
+        .then(() => console.log('Save user to disk: ', user))
+        .catch((err) => console.log('AsyncStorage error:', err.message))
+        .done();
+    })
+    .catch((err) => {
+      console.warn(err);
     })
     .done();
 }
