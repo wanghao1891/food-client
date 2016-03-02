@@ -28,6 +28,10 @@ function render() {
       <Text style={{textAlign: 'center', marginTop: 10}}>Setting</Text>
       </View>
 
+      <View style={styles.user}>
+      <Text style={{borderWidth: 0}}>Welcome {this.props.username}!</Text>
+      </View>
+
       <View style={styles.host}>
       <TextInput
     style={styles.input}
@@ -58,7 +62,8 @@ function render() {
 
 function get_initial_state() {
   return {
-    host: 'pourquoi.wang:6006'
+    host: 'pourquoi.wang:6006',
+    username: this.props.username
   };
 }
 
@@ -106,6 +111,15 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  user: {
+    flexDirection: 'row',
+    //borderWidth: 1,
+    //alignSelf: 'stretch',
+    justifyContent: 'center',
+    //alignItems: 'center'
+    marginTop: 5,
+    padding: 5
   },
   host: {
     flexDirection: 'row',

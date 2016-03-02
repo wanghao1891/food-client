@@ -48,7 +48,8 @@ function component_did_mount() {
             initial_route = {
               id: 'food_list',
               sid: user.sid,
-              host: value || HOST
+              host: value || HOST,
+              username: user.name
             };
           } else {
             initial_route = {
