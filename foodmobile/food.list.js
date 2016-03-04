@@ -23,6 +23,7 @@ var Swipeout = require('react-native-swipeout');
 var _ = require('lodash');
 var CheckBox = require('react-native-checkbox');
 var ActionSheet = require('@remobile/react-native-action-sheet');
+var RefreshableListView = require('react-native-refreshable-listview');
 
 var filters = [
   'Cancel',
@@ -31,6 +32,14 @@ var filters = [
   'Normal',
   'All',
 ];
+
+//      <ListView
+//    dataSource={this.state.data_source}
+//    renderRow={this.render_row}
+//    style={styles.list_view}
+//    renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+//    renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
+//      />
 
 //      <View style={{height: Screen.height - 120, borderBottomWidth: 1}}>
 //      <ListView
@@ -157,11 +166,12 @@ function render() {
       <Text style={styles.list_header_text}>Expiration</Text>
       </View>
 
-      <ListView
+      <RefreshableListView
     dataSource={this.state.data_source}
     renderRow={this.render_row}
     style={styles.list_view}
-    renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+    refreshDescription="Refreshing..."
+    loadData={this.get_food_list}
     renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
       />
 
