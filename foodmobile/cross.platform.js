@@ -41,7 +41,7 @@ function component_did_mount() {
 
       AsyncStorage.getItem(config.async_storage_key.host)
         .then((value) => {
-          console.log('Saveed host:', value);
+          console.log('Saved host:', value);
 
           var initial_route;
           if(user) {

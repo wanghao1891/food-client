@@ -240,8 +240,13 @@ function get_food_list(type) {
     return;
   }
 
+  console.log('type is:', typeof type);
+  if(!type || typeof type == 'function') {
+    type = this.state.title.toLowerCase();
+  }
+
   var url = this.props.host + '/api/food/' + type;
-  //console.log('get_food_list url:', url);
+  console.log('get_food_list url:', url);
   fetch(url, {
     method: 'GET',
     headers: {
