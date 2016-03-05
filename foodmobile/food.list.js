@@ -52,6 +52,7 @@ var filters = [
 //      </View>
 function render() {
   var filter_button,
+      category_button,
       edit_button,
       add_button,
       cancel_button,
@@ -60,6 +61,7 @@ function render() {
 
   if(this.state.edit_mode) {
     filter_button = null;
+    category_button = null;
     edit_button = null;
     add_button = null;
 
@@ -99,6 +101,16 @@ function render() {
         </TouchableOpacity>
     );
 
+    category_button = (
+        <TouchableOpacity
+      style={styles.category_food}
+      ref='button'
+      onPress={this.show_category}
+      underlayColor='#99d9f4'>
+        <Text style={styles.category_food_text}>Category</Text>
+        </TouchableOpacity>
+    );
+
     edit_button = (
         <TouchableOpacity style={styles.edit_food}
       onPress={this.edit_food}
@@ -122,6 +134,25 @@ function render() {
     edit_operation_view = null;
   }
 
+  var category_action_sheet = (
+      <ActionSheet
+    visible={this.state.show_category_action_sheet}
+    onCancel={() => this.setState({show_category_action_sheet: false})} >
+
+      {this.state.category_list.map(function(element, index) {
+        return (
+            <ActionSheet.Button
+          onPress={() => this.process_filter('Expired')}
+          key={index}
+            >
+            {element.name}
+          </ActionSheet.Button>
+        );
+      })}
+
+      </ActionSheet>
+  );
+
   return (
       <View style={{flex: 1}}>
 
@@ -129,6 +160,7 @@ function render() {
       <Text style={{textAlign: 'center', marginTop: 10}}>{this.state.title}</Text>
 
       {filter_button}
+    {category_button}
     {select_all_button}
 
       <Popover
@@ -177,6 +209,8 @@ function render() {
 
       {edit_operation_view}
 
+    {category_action_sheet}
+
       <ActionSheet
     visible={this.state.show_filter_action_sheet}
     onCancel={() => this.setState({show_filter_action_sheet: false})} >
@@ -210,7 +244,9 @@ function get_initial_state() {
     food_list: [],
     title: 'All',
     select_all_name: 'Select All',
-    show_filter_action_sheet: false
+    show_filter_action_sheet: false,
+    show_category_action_sheet: false,
+    category_list: []
   };
 }
 
@@ -233,6 +269,10 @@ function show_filter() {
 
     this.get_food_list(filters[button_index].toLowerCase());
   });*/
+}
+
+function show_category() {
+  this.setState({show_category_action_sheet: true});
 }
 
 function get_food_list(type) {
@@ -269,6 +309,48 @@ function get_food_list(type) {
       console.log(err);
     })
     .done();
+}
+
+function get_configuration_list(type, callback) {
+  if(type === 'cancel') {
+    return;
+  }
+
+//  console.log('type is:', typeof type);
+//  if(!type || typeof type == 'function') {
+//    type = this.state.title.toLowerCase();
+//  }
+
+  var url = this.props.host + '/api/food/configuration/' + type;
+  console.log('get_configuration_list url:', url);
+  fetch(url, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      sid: this.props.sid
+    }
+  })
+    .then((response) => response.json())
+    .then((response_data) => {
+      console.log('get_configuration_list data:', response_data);
+
+      callback(response_data.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .done();
+}
+
+function get_category_list() {
+  var self = this;
+  self.get_configuration_list('category', function(data) {
+    console.log('get_category_list');
+    self.setState({
+      category_list: data
+    });
+  });
 }
 
 function show_food_detail(food) {
@@ -508,6 +590,7 @@ function delete_all() {
 
 function component_did_mount() {
   this.get_food_list('all');
+  this.get_category_list();
 }
 
 var options = {
@@ -519,6 +602,7 @@ var options = {
   show_popover: show_popover,
   close_popover: close_popover,
   show_filter: show_filter,
+  show_category: show_category,
   get_food_list: get_food_list,
   delete_food: delete_food,
   show_food_detail: show_food_detail,
@@ -526,7 +610,9 @@ var options = {
   exit_edit_mode: exit_edit_mode,
   toggle_select_all: toggle_select_all,
   delete_all: delete_all,
-  process_filter: process_filter
+  process_filter: process_filter,
+  get_category_list: get_category_list,
+  get_configuration_list: get_configuration_list
 };
 
 var ShowView = React.createClass(options);
@@ -604,6 +690,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   filter_food_text: {
+    //fontSize: 20,
+    //color: 'white',
+    alignSelf: 'center'
+  },
+  category_food: {
+    position: 'absolute',
+    top: 20,
+    left: 60,
+    height: 30,
+    width: 60,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  category_food_text: {
     //fontSize: 20,
     //color: 'white',
     alignSelf: 'center'
