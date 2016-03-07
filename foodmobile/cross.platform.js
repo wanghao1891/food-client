@@ -17,6 +17,7 @@ var SignupView = require('./signup');
 //var FoodListView = require('./food.list');
 var FoodListView = require('./tab.bar');
 var CreateFoodView = require('./create.food');
+var CreateCategoryView = require('./create.category');
 var Setting = require('./setting');
 var FoodDetailView = require('./food.detail');
 var config = require('./config');
@@ -121,6 +122,13 @@ function render_scene(route, navigator) {
       />;
   case 'create_food':
     return <CreateFoodView
+    navigator={navigator}
+    host={route.host}
+    sid={route.sid}
+    username={route.username}
+      />;
+  case 'create_category':
+    return <CreateCategoryView
     navigator={navigator}
     host={route.host}
     sid={route.sid}

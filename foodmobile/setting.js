@@ -35,15 +35,29 @@ function render() {
       <View style={styles.host}>
       <TextInput
     style={styles.input}
-    onChangeText={(host) => this.setState({host})}
+    onChangeText={(host) => this.setState({host: host})}
     value={this.state.host}
     placeholder='Host'/>
 
       <TouchableHighlight
     style={styles.button}
     onPress={this.show_singin_view}
-    underlayColor='white'>
+    underlayColor='white'
+      >
       <Text style={styles.button_text}>Save</Text>
+      </TouchableHighlight>
+      </View>
+
+      <View style={styles.category}>
+      <TouchableHighlight
+    style={styles.button}
+    onPress={this.show_creating_category}
+    underlayColor='white'
+      >
+      <View style={styles.category_view}>
+      <Text style={styles.category_text_left}>Category</Text>
+      <Text>></Text>
+      </View>
       </TouchableHighlight>
       </View>
 
@@ -62,13 +76,13 @@ function render() {
 
 function get_initial_state() {
   return {
-    host: 'pourquoi.wang:6006',
+    host: this.props.host || 'http://pourquoi.wang:6006',
     username: this.props.username
   };
 }
 
 function show_singin_view() {
-  var host = 'http://' + this.state.host;
+  var host = this.state.host;
   AsyncStorage.setItem(config.async_storage_key.host, host)
     .then(() => {
       console.log('Save host to disk:', host);
@@ -89,18 +103,27 @@ function sign_out() {
 
       this.props.navigator.push({
         id: 'signin',
-        host: 'http://' + this.state.host
+        host: this.state.host
       });
     })
     .catch((err) => console.log('AsyncStorage error:', err.message))
     .done();
 }
 
+function show_creating_category() {
+  this.props.navigator.push({
+    id: 'create_category',
+    host: this.state.host,
+    sid: this.props.sid
+  });
+}
+
 var options = {
   render: render,
   getInitialState: get_initial_state,
   show_singin_view: show_singin_view,
-  sign_out: sign_out
+  sign_out: sign_out,
+  show_creating_category: show_creating_category
 };
 
 var ConfigurationView = React.createClass(options);
@@ -145,6 +168,19 @@ const styles = StyleSheet.create({
   },
   button_text: {
     alignSelf: 'center'
+  },
+  category: {
+    //borderWidth: 1,
+    marginTop: 5,
+    padding: 5,
+    alignItems: 'center',
+    alignSelf: 'stretch'
+  },
+  category_view: {
+    flexDirection: 'row'
+  },
+  category_text_left: {
+    width: 250
   }
 });
 
