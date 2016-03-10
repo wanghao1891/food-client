@@ -112,7 +112,8 @@ function sign_out() {
 
 function show_creating_category() {
   this.props.navigator.push({
-    id: 'create_category',
+    //id: 'create_category',
+    id: 'category_list',
     host: this.state.host,
     sid: this.props.sid
   });
