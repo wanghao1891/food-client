@@ -27,18 +27,95 @@ var ActionSheet = require('@remobile/react-native-action-sheet');
 var RefreshableListView = require('react-native-refreshable-listview');
 
 function render() {
+  var edit_button,
+      add_button,
+      back_button,
+      cancel_button,
+      edit_operation_view,
+      select_all_button;
+
+  if(this.state.edit_mode) {
+    edit_button = null;
+    add_button = null;
+    back_button = null;
+
+    select_all_button = (
+        <TouchableOpacity style={styles.select_all}
+      onPress={this.toggle_select_all}
+      underlayColor='#99d9f4'>
+        <Text style={styles.select_all_text}>{this.state.select_all_name}</Text>
+        </TouchableOpacity>
+    );
+
+    cancel_button = (
+        <TouchableOpacity style={styles.cancel}
+      onPress={this.exit_edit_mode}
+      underlayColor='#99d9f4'>
+        <Text style={styles.cancel_text}>Cancel</Text>
+        </TouchableOpacity>
+    );
+
+    edit_operation_view = (
+        <View style={styles.edit_operation_view}>
+        <TouchableOpacity style={styles.delete_all}
+      onPress={this.delete_all}
+      underlayColor='#99d9f4'>
+        <Text style={styles.delete_all_text}>Delete All</Text>
+        </TouchableOpacity>
+        </View>
+    );
+  } else {
+    back_button = (
+        <TouchableOpacity
+      style={styles.filter_food}
+      ref='button'
+      onPress={this.props.navigator.pop}
+      underlayColor='#99d9f4'>
+        <Text style={styles.filter_food_text}>Back</Text>
+        </TouchableOpacity>
+    );
+
+    edit_button = (
+        <TouchableOpacity style={styles.edit_food}
+      onPress={this.edit_food}
+      underlayColor='#99d9f4'>
+        <Text style={styles.edit_food_text}>Edit</Text>
+        </TouchableOpacity>
+    );
+
+    add_button = (
+        <TouchableOpacity style={styles.create_food}
+      onPress={this.create_food}
+      underlayColor='#99d9f4'>
+        <Text style={styles.create_food_text}>Add</Text>
+        </TouchableOpacity>
+    );
+
+    select_all_button = null;
+
+    cancel_button = null;
+
+    edit_operation_view = null;
+  }
+
   return (
       <View style={{flex: 1}}>
 
       <View style={styles.header}>
       <Text style={{textAlign: 'center', marginTop: 10}}>{this.state.title}</Text>
-      </View>
+      {back_button}
+    {select_all_button}
+    {edit_button}
+    {add_button}
+    {cancel_button}
+    </View>
 
       <ListView
     dataSource={this.state.data_source}
     renderRow={this.render_row}
     style={styles.list_view}
     loadData={this.get_food_list}
+    renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
     refreshControl={
         <RefreshControl
       refreshing={this.state.is_refreshing}
@@ -48,7 +125,10 @@ function render() {
         />
     }
       />
-      </View>
+
+      {edit_operation_view}
+
+    </View>
   );
 }
 
@@ -164,20 +244,20 @@ function render_row(e) {
       onChange={(checked) => {
         //console.log('I am checked', checked);
 
-        var food_list = _.map(this.state.food_list, function(food) {
-          if(food._id == e._id) {
-            var _food = _.cloneDeep(food);
-            _food.checked = _food.checked ? false : true;
-            return _food;
+        var category_list = _.map(this.state.category_list, function(category) {
+          if(category._id == e._id) {
+            var _category = _.cloneDeep(category);
+            _category.checked = _category.checked ? false : true;
+            return _category;
           } else {
-            return food;
+            return category;
           }
         });
 
         this.setState({
           edit_mode: true,
-          food_list: food_list,
-          data_source: this.state.data_source.cloneWithRows(food_list)
+          category_list: category_list,
+          data_source: this.state.data_source.cloneWithRows(category_list)
         });
       }}
         />
@@ -253,7 +333,7 @@ function delete_food(food) {
 }
 
 function edit_food() {
-  var food_list = _.cloneDeep(this.state.food_list);
+  var category_list = _.cloneDeep(this.state.category_list);
 //  food_list = _.map(food_list, function(e) {
 //    e.edit_mode = true;
 //    //e.name = 'test';
@@ -265,20 +345,20 @@ function edit_food() {
   //console.log('compare:', this.state.food_list[0] === food_list[0]);
   this.setState({
     edit_mode: true,
-    food_list: food_list,
-    data_source: this.state.data_source.cloneWithRows(food_list)
+    category_list: category_list,
+    data_source: this.state.data_source.cloneWithRows(category_list)
   });
 }
 
 function exit_edit_mode() {
-  var food_list = _.cloneDeep(this.state.food_list);
+  var category_list = _.cloneDeep(this.state.category_list);
 
   //console.log('exit_edit_mode food_list:', food_list);
   //console.log('compare:', this.state.food_list[0] === food_list[0]);
   this.setState({
     edit_mode: false,
-    food_list: food_list,
-    data_source: this.state.data_source.cloneWithRows(food_list)
+    category_list: category_list,
+    data_source: this.state.data_source.cloneWithRows(category_list)
   });
 }
 
@@ -293,8 +373,8 @@ function toggle_select_all() {
     checked = false;
   }
 
-  var food_list = _.cloneDeep(this.state.food_list);
-  food_list = _.map(food_list, function(e) {
+  var category_list = _.cloneDeep(this.state.category_list);
+  category_list = _.map(category_list, function(e) {
     e.checked = checked;
 
     return e;
@@ -302,8 +382,8 @@ function toggle_select_all() {
   //console.log('toggle_select_all food_list:', food_list);
   //console.log('toggle_select_all compare:', this.state.food_list[0] === food_list[0]);
   this.setState({
-    food_list: food_list,
-    data_source: this.state.data_source.cloneWithRows(food_list),
+    category_list: category_list,
+    data_source: this.state.data_source.cloneWithRows(category_list),
     select_all_name: name
   });
 }
@@ -411,7 +491,7 @@ const styles = StyleSheet.create({
   },
   list_text: {
     //borderWidth: 1,
-    //textAlign: 'auto',
+    textAlign: 'center',
     //height: 26,
     width: 80
   },
