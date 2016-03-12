@@ -296,7 +296,7 @@ function render_row(e) {
 
 function create_food() {
   this.props.navigator.push({
-    id: 'create_food',
+    id: 'create_category',
     sid: this.props.sid,
     username: this.props.username,
     host: this.props.host

@@ -87,7 +87,7 @@ function create_category() {
     .then((response) => response.json())
     .then((response_data) => {
       this.props.navigator.push({
-        id: 'food_list',
+        id: 'category_list',
         sid: this.props.sid,
         username: this.props.username,
         host: this.props.host
