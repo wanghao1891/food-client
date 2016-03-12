@@ -304,7 +304,7 @@ function create_food() {
 }
 
 function delete_food(food) {
-  var url = this.props.host + '/api/food/' + food._id;
+  var url = this.props.host + '/api/food/configuration/' + food._id;
   //console.log('delete_food url:', url);
   fetch(url, {
     method: 'DELETE',
@@ -318,12 +318,12 @@ function delete_food(food) {
     .then((response_data) => {
       //console.log(response_data);
 
-      var food_list = _.filter(this.state.food_list, function(e) {
+      var category_list = _.filter(this.state.category_list, function(e) {
         return (e._id !== food._id);
       });
       this.setState({
-        food_list: food_list,
-        data_source: this.state.data_source.cloneWithRows(food_list)
+        category_list: category_list,
+        data_source: this.state.data_source.cloneWithRows(category_list)
       });
     })
     .catch((err) => {
