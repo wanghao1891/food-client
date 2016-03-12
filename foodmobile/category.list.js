@@ -389,7 +389,7 @@ function toggle_select_all() {
 }
 
 function delete_all() {
-  var delete_object_list = _.filter(this.state.food_list, function(e) {
+  var delete_object_list = _.filter(this.state.category_list, function(e) {
     return e.checked;
   });
 
@@ -403,7 +403,7 @@ function delete_all() {
 
   //console.log('delete_all delete_id_list:', delete_id_list);
 
-  var url = this.props.host + '/api/food';
+  var url = this.props.host + '/api/food/configuration';
   //console.log('delete_all url:', url);
   fetch(url, {
     method: 'DELETE',
@@ -412,7 +412,7 @@ function delete_all() {
       'Content-Type': 'application/json',
       sid: this.props.sid
     },
-    body: JSON.stringify({food_id_list: delete_id_list})
+    body: JSON.stringify({id_list: delete_id_list})
   })
     .then((response) => response.json())
     .then((response_data) => {
@@ -420,12 +420,12 @@ function delete_all() {
 
       //this.get_food_list('all');
 
-      var food_list = _.filter(this.state.food_list, function(e) {
+      var category_list = _.filter(this.state.category_list, function(e) {
         return (delete_id_list.indexOf(e._id) == -1);
       });
       this.setState({
-        food_list: food_list,
-        data_source: this.state.data_source.cloneWithRows(food_list)
+        category_list: category_list,
+        data_source: this.state.data_source.cloneWithRows(category_list)
       });
     })
     .catch((err) => {
