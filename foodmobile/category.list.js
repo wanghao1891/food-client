@@ -217,11 +217,11 @@ function on_refresh() {
 
 function show_food_detail(food) {
   this.props.navigator.push({
-    id: 'food_detail',
+    id: 'category_detail',
     sid: this.props.sid,
     username: this.props.username,
     host: this.props.host,
-    food: food
+    category: food
   });
 }
 

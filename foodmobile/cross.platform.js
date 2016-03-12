@@ -21,6 +21,7 @@ var CreateCategoryView = require('./create.category');
 var Setting = require('./setting');
 var FoodDetailView = require('./food.detail');
 var CategoryListView = require('./category.list');
+var CategoryDetailView = require('./category.detail');
 var config = require('./config');
 
 var HOST = 'http://192.168.77.161:6006';
@@ -153,6 +154,13 @@ function render_scene(route, navigator) {
     host={route.host}
     sid={route.sid}
     username={route.username}
+      />;
+  case 'category_detail':
+    return <CategoryDetailView
+    navigator={navigator}
+    category={route.category}
+    host={route.host}
+    sid={route.sid}
       />;
   default:
     return <SigninView
