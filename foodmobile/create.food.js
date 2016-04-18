@@ -13,7 +13,8 @@ import React, {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Picker,
-  Dimensions
+  Dimensions,
+  Switch
 } from 'react-native';
 
 var moment = require('moment');
@@ -121,76 +122,67 @@ function render() {
   );
 
   return (
-      <View>
-
+    <View>
       <View style={styles.header}>
-      <Text style={{textAlign: 'center', marginTop: 10}}>Add Food</Text>
-
-      <TouchableOpacity
-    style={styles.cancel}
-    ref='button'
-    onPress={this.props.navigator.pop}
-    underlayColor='#99d9f4'>
-      <Text style={styles.cancel_text}>Cancel</Text>
-      </TouchableOpacity>
+        <Text style={{textAlign: 'center', marginTop: 10}}>Add Food</Text>
+        <TouchableOpacity
+           style={styles.cancel}
+           ref='button'
+           onPress={this.props.navigator.pop}
+           underlayColor='#99d9f4'>
+          <Text style={styles.cancel_text}>Cancel</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.item_container}>
-      <Text style={{width: 80}}>Name: </Text>
-      <TextInput
-    style={styles.name_input}
-    onChange={this.on_foodname_change}
-    value={this.state.foodname}
-    placeholder='Name'
-    onFocus={this.toggle_foodname_picker}
-    onBlur={this.toggle_foodname_picker}
-      >
-      </TextInput>
+        <Text style={{width: 80}}>Name: </Text>
+        <TextInput
+           style={styles.name_input}
+           onChange={this.on_foodname_change}
+           value={this.state.foodname}
+           placeholder='Name'
+           onFocus={this.toggle_foodname_picker}
+           onBlur={this.toggle_foodname_picker}
+           >
+        </TextInput>
       </View>
 
       <View style={styles.item_container}>
-      <Text style={{width: 80}}>Pur.: </Text>
+        <Text style={{width: 80}}>Start: </Text>
 
-      <TouchableWithoutFeedback
-    onPress={this.toggle_purchase_date_picker}
-      >
-      <View style={styles.input}>
-      <Text>
-      {moment(this.state.purchase_date).format('MM/DD/YYYY')}
-      </Text>
-      </View>
-      </TouchableWithoutFeedback>
-      </View>
-
-      <View style={styles.item_container}>
-      <Text style={{width: 80}}>Exp.: </Text>
-
-      <TouchableWithoutFeedback
-    onPress={this.toggle_expiration_date_picker}
-      >
-      <View style={styles.input}>
-      <Text>
-      {moment(this.state.expiration_date).format('MM/DD/YYYY')}
-      </Text>
-      </View>
-      </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+           onPress={this.toggle_purchase_date_picker}
+           >
+          <View style={styles.input}>
+            <Text>
+              {moment(this.state.purchase_date).format('MM/DD/YYYY')}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
 
       <View style={styles.item_container}>
-      <TouchableHighlight style={styles.button}
-    onPress={this.create_food}
-    underlayColor='#99d9f4'>
-      <Text style={styles.buttonText}>Add</Text>
-      </TouchableHighlight>
+        <Text style={{width: 80}}>Allergy Risk: </Text>
+        <Switch
+           onValueChange={(value) => this.setState({allergy: value})}
+          value={this.state.allergy} />
+      </View>
+
+      <View style={styles.item_container}>
+        <TouchableHighlight style={styles.button}
+                            onPress={this.create_food}
+                            underlayColor='#99d9f4'>
+          <Text style={styles.buttonText}>Add</Text>
+        </TouchableHighlight>
       </View>
 
       {this.state.date_picker_purchase_mode == 'visible' ? date_picker_purchase : <View/>}
 
-    {this.state.date_picker_expiration_mode == 'visible' ? date_picker_expiration : <View/>}
+      {this.state.date_picker_expiration_mode == 'visible' ? date_picker_expiration : <View/>}
 
-    {this.state.foodname_picker_mode == 'visible' ? foodname_picker : <View/>}
+      {this.state.foodname_picker_mode == 'visible' ? foodname_picker : <View/>}
 
-      </View>
+    </View>
   );
 }
 
@@ -202,7 +194,8 @@ function get_initial_state() {
     time_zone_offset_in_hours: (-1) * (new Date()).getTimezoneOffset() / 60,
     date_picker_purchase_mode: 'hidden',
     date_picker_expiration_mode: 'hidden',
-    foodname_picker_mode: 'hidden'
+    foodname_picker_mode: 'hidden',
+    allergy: false
   };
 }
 
@@ -275,7 +268,8 @@ function create_food() {
     body: JSON.stringify({
       name: this.state.foodname,
       purchase_date: this.state.purchase_date.getTime(),
-      expiration_date: this.state.expiration_date.getTime()
+      expiration_date: this.state.expiration_date.getTime(),
+      allergy: this.state.allergy
     })
   })
     .then((response) => response.json())
