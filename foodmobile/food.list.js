@@ -154,81 +154,80 @@ function render() {
   );
 
   return (
-      <View style={{flex: 1}}>
-
+    <View style={{flex: 1}}>
       <View style={styles.header}>
-      <Text style={{textAlign: 'center', marginTop: 10}}>{this.state.title}</Text>
+        <Text style={{textAlign: 'center', marginTop: 10}}>{this.state.title}</Text>
 
-      {filter_button}
-    {category_button}
-    {select_all_button}
+        {filter_button}
+        {category_button}
+        {select_all_button}
 
-      <Popover
-    isVisible={this.state.popover_isvisible}
-    fromRect={this.state.popover_rect}
-    onClose={this.close_popover}
-      >
+        <Popover
+           isVisible={this.state.popover_isvisible}
+           fromRect={this.state.popover_rect}
+           onClose={this.close_popover}
+           >
 
-      <View style={{backgroundColor: '#48BBEC'}}>
-      <TouchableHighlight>
-      <Text>All</Text>
-      </TouchableHighlight>
-      <TouchableHighlight>
+          <View style={{backgroundColor: '#48BBEC'}}>
+            <TouchableHighlight>
+              <Text>All</Text>
+            </TouchableHighlight>
+            <TouchableHighlight>
 
-      <Text>Expiring</Text>
-      </TouchableHighlight>
-      <TouchableHighlight>
+              <Text>Expiring</Text>
+            </TouchableHighlight>
+            <TouchableHighlight>
 
-      <Text>Expired</Text>
-      </TouchableHighlight>
-      </View>
+              <Text>Expired</Text>
+            </TouchableHighlight>
+          </View>
 
-      </Popover>
+        </Popover>
 
-      {edit_button}
+        {edit_button}
 
-    {add_button}
+        {add_button}
 
-    {cancel_button}
+        {cancel_button}
       </View>
 
       <View style={styles.list_header}>
-      <Text style={styles.list_header_text}>Name</Text>
-      <Text style={styles.list_header_text}>Purchase</Text>
-      <Text style={styles.list_header_text}>Expiration</Text>
+        <Text style={styles.list_header_text}>Name</Text>
+        <Text style={styles.list_header_text}>Start</Text>
+        <Text style={styles.list_header_text}>Allergy</Text>
       </View>
 
       <RefreshableListView
-    dataSource={this.state.data_source}
-    renderRow={this.render_row}
-    style={styles.list_view}
-    refreshDescription="Refreshing..."
-    loadData={this.get_food_list}
-    renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
-      />
+         dataSource={this.state.data_source}
+         renderRow={this.render_row}
+         style={styles.list_view}
+         refreshDescription="Refreshing..."
+         loadData={this.get_food_list}
+         renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.separator} />}
+        />
 
-      {edit_operation_view}
+        {edit_operation_view}
 
-    {category_action_sheet}
+        {category_action_sheet}
 
-      <ActionSheet
-    visible={this.state.show_filter_action_sheet}
-    onCancel={() => this.setState({show_filter_action_sheet: false})} >
-      <ActionSheet.Button
-    onPress={() => this.process_filter('Expired')}
-      >Expired</ActionSheet.Button>
-      <ActionSheet.Button
-    onPress={() => this.process_filter('Expiring')}
-      >Expiring</ActionSheet.Button>
-      <ActionSheet.Button
-    onPress={() => this.process_filter('Normal')}
-      >Normal</ActionSheet.Button>
-      <ActionSheet.Button
-    onPress={() => this.process_filter('All')}
-      >All</ActionSheet.Button>
-      </ActionSheet>
+        <ActionSheet
+           visible={this.state.show_filter_action_sheet}
+           onCancel={() => this.setState({show_filter_action_sheet: false})} >
+          <ActionSheet.Button
+             onPress={() => this.process_filter('Expired')}
+            >Expired</ActionSheet.Button>
+          <ActionSheet.Button
+             onPress={() => this.process_filter('Expiring')}
+            >Expiring</ActionSheet.Button>
+          <ActionSheet.Button
+             onPress={() => this.process_filter('Normal')}
+            >Normal</ActionSheet.Button>
+          <ActionSheet.Button
+             onPress={() => this.process_filter('All')}
+            >All</ActionSheet.Button>
+        </ActionSheet>
 
-      </View>
+    </View>
   );
 }
 
@@ -377,7 +376,7 @@ function close_popover() {
 }
 
 function render_row(e) {
-  //console.log('render_row:', e);
+  console.log('render_row:', e);
   //console.log('this.edit_mode:', this.state.edit_mode);
 
   var list_text = (
@@ -385,7 +384,7 @@ function render_row(e) {
       <Text style={styles.list_text}>{e.name}</Text>
       <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
       <Text> - </Text>
-      <Text style={styles.list_text}>{e.expiration_date ? moment.unix(e.expiration_date/1000).format('MM/DD/YYYY') : ''}</Text>
+      <Text style={styles.list_text}>{e.allergy ? 'yes': 'no'}</Text>
       </View>
   );
 
