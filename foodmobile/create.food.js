@@ -21,6 +21,7 @@ var moment = require('moment');
 var DatePicker = require('./date.picker');
 var Screen = Dimensions.get('window');
 var dismiss_keyboard = require('dismissKeyboard');
+var ActionSheet = require('@remobile/react-native-action-sheet');
 
 function render() {
   var date_picker_purchase = (
@@ -122,7 +123,7 @@ function render() {
   );
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <View style={styles.header}>
         <Text style={{textAlign: 'center', marginTop: 10}}>Add Food</Text>
         <TouchableOpacity
@@ -163,9 +164,15 @@ function render() {
 
       <View style={styles.item_container}>
         <Text style={{width: 80}}>Allergy Risk: </Text>
-        <Switch
-           onValueChange={(value) => this.setState({allergy: value})}
-          value={this.state.allergy} />
+        <TouchableWithoutFeedback
+           onPress={() => this.setState({show_allergy_action_sheet: true})}
+           >
+          <View style={styles.input}>
+            <Text>
+              {this.state.allergy_value}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
 
       <View style={styles.item_container}>
@@ -178,12 +185,29 @@ function render() {
 
       {this.state.date_picker_purchase_mode == 'visible' ? date_picker_purchase : <View/>}
 
-      {this.state.date_picker_expiration_mode == 'visible' ? date_picker_expiration : <View/>}
-
-      {this.state.foodname_picker_mode == 'visible' ? foodname_picker : <View/>}
-
+      <ActionSheet
+         visible={this.state.show_allergy_action_sheet}
+         onCancel={() => this.setState({show_allergy_action_sheet: false})} >
+        <ActionSheet.Button
+           onPress={() => this.process_allergy({key: 1, value: 'Yes'})}
+          >Yes</ActionSheet.Button>
+        <ActionSheet.Button
+           onPress={() => this.process_allergy({key: 0, value: 'No'})}
+          >No</ActionSheet.Button>
+        <ActionSheet.Button
+           onPress={() => this.process_allergy({key: 2, value: 'Uncertain'})}
+          >Uncertain</ActionSheet.Button>
+      </ActionSheet>
     </View>
   );
+}
+
+function process_allergy($in) {
+  this.setState({
+    show_allergy_action_sheet: false,
+    allergy_value: $in.value,
+    allergy_key: $in.key
+  });
 }
 
 function get_initial_state() {
@@ -195,7 +219,9 @@ function get_initial_state() {
     date_picker_purchase_mode: 'hidden',
     date_picker_expiration_mode: 'hidden',
     foodname_picker_mode: 'hidden',
-    allergy: false
+    allergy_value: 'No',
+    allergy_key: 0,
+    show_allergy_action_sheet: false
   };
 }
 
@@ -269,7 +295,7 @@ function create_food() {
       name: this.state.foodname,
       purchase_date: this.state.purchase_date.getTime(),
       expiration_date: this.state.expiration_date.getTime(),
-      allergy: this.state.allergy
+      allergy: this.state.allergy_key
     })
   })
     .then((response) => response.json())
@@ -297,7 +323,8 @@ var options = {
   toggle_expiration_date_picker: toggle_expiration_date_picker,
   toggle_foodname_picker: toggle_foodname_picker,
   on_purchase_date_close: on_purchase_date_close,
-  on_expiration_date_close: on_expiration_date_close
+  on_expiration_date_close: on_expiration_date_close,
+  process_allergy: process_allergy
 };
 
 var CreateFoodView = React.createClass(options);

@@ -379,12 +379,19 @@ function render_row(e) {
   console.log('render_row:', e);
   //console.log('this.edit_mode:', this.state.edit_mode);
 
+  var allergy = 'Uncertain'; //allergy is 2
+  if(e.allergy == 0) {
+    allergy = 'No';
+  } else if(e.allergy == 1) {
+    allergy = 'Yes';
+  }
+
   var list_text = (
       <View style={styles.list_text_view}>
       <Text style={styles.list_text}>{e.name}</Text>
       <Text style={styles.list_text}>{e.purchase_date ? moment.unix(e.purchase_date/1000).format('MM/DD/YYYY') : ''}</Text>
       <Text> - </Text>
-      <Text style={styles.list_text}>{e.allergy ? 'yes': 'no'}</Text>
+      <Text style={styles.list_text}>{allergy}</Text>
       </View>
   );
 
