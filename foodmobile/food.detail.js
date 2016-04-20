@@ -20,6 +20,7 @@ var moment = require('moment');
 var DatePicker = require('./date.picker');
 var Screen = Dimensions.get('window');
 var dismiss_keyboard = require('dismissKeyboard');
+var ActionSheet = require('@remobile/react-native-action-sheet');
 
 function render() {
   var date_picker_purchase = (
@@ -121,85 +122,109 @@ function render() {
   );
 
   return (
-      <View>
+    <View>
 
       <View style={styles.header}>
-      <Text style={{textAlign: 'center', marginTop: 10}}>Food Detail</Text>
+        <Text style={{textAlign: 'center', marginTop: 10}}>Food Detail</Text>
 
-      <TouchableOpacity
-    style={styles.cancel}
-    ref='button'
-    onPress={this.props.navigator.pop}
-    underlayColor='#99d9f4'>
-      <Text style={styles.cancel_text}>Cancel</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+           style={styles.cancel}
+           ref='button'
+           onPress={this.props.navigator.pop}
+           underlayColor='#99d9f4'>
+          <Text style={styles.cancel_text}>Cancel</Text>
+        </TouchableOpacity>
       </View>
 
       <View>
-      <Text style={{color: 'red', textAlign: 'center'}}>{this.state.error}</Text>
+        <Text style={{color: 'red', textAlign: 'center'}}>{this.state.error}</Text>
       </View>
 
       <View style={styles.item_container}>
-      <Text style={{width: 80}}>Name: </Text>
-      <TextInput
-    style={styles.name_input}
-    onChange={this.on_foodname_change}
-    value={this.state.foodname}
-    placeholder='Name'
-    onFocus={this.toggle_foodname_picker}
-    onBlur={this.toggle_foodname_picker}
-      >
-      </TextInput>
+        <Text style={{width: 80}}>Name: </Text>
+        <TextInput
+           style={styles.name_input}
+           onChange={this.on_foodname_change}
+           value={this.state.foodname}
+           placeholder='Name'
+           onFocus={this.toggle_foodname_picker}
+           onBlur={this.toggle_foodname_picker}
+           >
+        </TextInput>
       </View>
 
       <View style={styles.item_container}>
-      <Text style={{width: 80}}>Pur.: </Text>
+        <Text style={{width: 80}}>Pur.: </Text>
 
-      <TouchableWithoutFeedback
-    onPress={this.toggle_purchase_date_picker}
-      >
-      <View style={styles.input}>
-      <Text>
-      {moment(this.state.purchase_date).format('MM/DD/YYYY')}
-      </Text>
-      </View>
-      </TouchableWithoutFeedback>
-      </View>
-
-      <View style={styles.item_container}>
-      <Text style={{width: 80}}>Exp.: </Text>
-
-      <TouchableWithoutFeedback
-    onPress={this.toggle_expiration_date_picker}
-      >
-      <View style={styles.input}>
-      <Text>
-      {moment(this.state.expiration_date).format('MM/DD/YYYY')}
-      </Text>
-      </View>
-      </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+           onPress={this.toggle_purchase_date_picker}
+           >
+          <View style={styles.input}>
+            <Text>
+              {moment(this.state.purchase_date).format('MM/DD/YYYY')}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
 
       <View style={styles.item_container}>
-      <TouchableHighlight style={styles.button}
-    onPress={this.update_food}
-    underlayColor='#99d9f4'>
-      <Text style={styles.buttonText}>Save</Text>
-      </TouchableHighlight>
+        <Text style={{width: 80}}>Allergy: </Text>
+        <TouchableWithoutFeedback
+           onPress={() => this.setState({show_allergy_action_sheet: true})}
+          >
+          <View style={styles.input}>
+            <Text>
+              {this.state.allergy_value}
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+
+      <View style={styles.item_container}>
+        <TouchableHighlight style={styles.button}
+                            onPress={this.update_food}
+                            underlayColor='#99d9f4'>
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableHighlight>
       </View>
 
       {this.state.date_picker_purchase_mode == 'visible' ? date_picker_purchase : <View/>}
 
-    {this.state.date_picker_expiration_mode == 'visible' ? date_picker_expiration : <View/>}
-
-    {this.state.foodname_picker_mode == 'visible' ? foodname_picker : <View/>}
-
-      </View>
+      <ActionSheet
+         visible={this.state.show_allergy_action_sheet}
+         onCancel={() => this.setState({show_allergy_action_sheet: false})} >
+        <ActionSheet.Button
+           onPress={() => this.process_allergy({key: 1, value: 'Yes'})}
+          >Yes</ActionSheet.Button>
+        <ActionSheet.Button
+           onPress={() => this.process_allergy({key: 0, value: 'No'})}
+          >No</ActionSheet.Button>
+        <ActionSheet.Button
+           onPress={() => this.process_allergy({key: 2, value: 'Uncertain'})}
+          >Uncertain</ActionSheet.Button>
+      </ActionSheet>
+    </View>
   );
+}
+
+function process_allergy($in) {
+  this.setState({
+    show_allergy_action_sheet: false,
+    allergy_value: $in.value,
+    allergy_key: $in.key
+  });
 }
 
 function get_initial_state() {
   //console.log('expiration_date:', this.props.food.expiration_date);
+
+  var food = this.props.food;
+  var allergy = 'Uncertain'; //allergy is 2
+  if(food.allergy == 0) {
+    allergy = 'No';
+  } else if(food.allergy == 1) {
+    allergy = 'Yes';
+  }
 
   return {
     foodname: this.props.food.name,
@@ -209,7 +234,10 @@ function get_initial_state() {
     date_picker_purchase_mode: 'hidden',
     date_picker_expiration_mode: 'hidden',
     foodname_picker_mode: 'hidden',
-    error: ''
+    error: '',
+    allergy_value: allergy,
+    allergy_key: this.props.food.allergy,
+    show_allergy_action_sheet: false
   };
 }
 
@@ -285,7 +313,8 @@ function update_food() {
     body: JSON.stringify({
       name: this.state.foodname,
       purchase_date: this.state.purchase_date.getTime(),
-      expiration_date: this.state.expiration_date.getTime()
+      expiration_date: this.state.expiration_date.getTime(),
+      allergy: this.state.allergy_key
     })
   })
     .then((response) => response.json())
@@ -317,7 +346,8 @@ var options = {
   toggle_expiration_date_picker: toggle_expiration_date_picker,
   toggle_foodname_picker: toggle_foodname_picker,
   on_purchase_date_close: on_purchase_date_close,
-  on_expiration_date_close: on_expiration_date_close
+  on_expiration_date_close: on_expiration_date_close,
+  process_allergy: process_allergy
 };
 
 var FoodDetailView = React.createClass(options);

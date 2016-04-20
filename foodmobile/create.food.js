@@ -163,7 +163,7 @@ function render() {
       </View>
 
       <View style={styles.item_container}>
-        <Text style={{width: 80}}>Allergy Risk: </Text>
+        <Text style={{width: 80}}>Allergy: </Text>
         <TouchableWithoutFeedback
            onPress={() => this.setState({show_allergy_action_sheet: true})}
            >
